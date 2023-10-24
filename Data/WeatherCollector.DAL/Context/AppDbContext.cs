@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WeatherCollector.DAL.Entities;
+using WeatherCollector.DAL.EntityTypeConfigurations;
 
 namespace WeatherCollector.DAL.Context
 {
@@ -15,10 +16,8 @@ namespace WeatherCollector.DAL.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<DataSource>()
-                .HasMany<DataValue>()
-                .WithOne(v => v.Source)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.ApplyConfiguration(new EntityConfiguration());
+            modelBuilder.ApplyConfiguration(new DataSourceConfiguration());
         }
     }
 }
