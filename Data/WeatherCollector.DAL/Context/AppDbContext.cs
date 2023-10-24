@@ -16,7 +16,6 @@ namespace WeatherCollector.DAL.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new EntityConfiguration());
             modelBuilder.ApplyConfiguration(new DataSourceConfiguration());
         }
     }
