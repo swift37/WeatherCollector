@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WeatherCollector.DAL\WeatherCollector.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\WeatherCollector.Interfaces\WeatherCollector.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\WeatherCollector.Clients\WeatherCollector.Clients.csproj" />
+  </ItemGroup>
+
 </Project>
