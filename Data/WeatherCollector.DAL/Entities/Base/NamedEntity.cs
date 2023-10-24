@@ -1,4 +1,4 @@
-﻿using WeatherCollector.Interfaces.Base;
+﻿using WeatherCollector.Interfaces.Entities;
 
 namespace WeatherCollector.DAL.Entities.Base
 {
