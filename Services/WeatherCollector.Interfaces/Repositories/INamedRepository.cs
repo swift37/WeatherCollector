@@ -6,8 +6,8 @@ namespace WeatherCollector.Interfaces.Repositories
     {
         Task<bool> ExistName(string? name, CancellationToken cancellation = default);
 
-        Task<T> GetByName(string? name, CancellationToken cancellation = default);
+        Task<T?> GetByName(string? name, CancellationToken cancellation = default);
 
-        Task<T> DeleteByName(string? name, CancellationToken cancellation = default);
+        Task<T?> DeleteByName(string? name, CancellationToken cancellation = default);
     }
 }

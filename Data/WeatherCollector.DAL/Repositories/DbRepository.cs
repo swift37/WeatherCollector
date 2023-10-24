@@ -42,7 +42,7 @@ namespace WeatherCollector.DAL.Repositories
         {
             var entity = DbSet.Local.FirstOrDefault(e => e.Id == id);
             if (entity is null) await DbSet
-                    .Select(e => new T { Id = id })
+                    .Select(e => new T { Id = e.Id })
                     .FirstOrDefaultAsync(e => e.Id == id, cancellation)
                     .ConfigureAwait(false);
             if (entity is null) return null;
@@ -69,7 +69,7 @@ namespace WeatherCollector.DAL.Repositories
                 case DbSet<T> dbSet:
                     return await dbSet.FindAsync(new object[] { id }, cancellation).ConfigureAwait(false);
                 case { } entities:
-                    return await Entities.FirstOrDefaultAsync(e => e.Id == id, cancellation).ConfigureAwait(false);
+                    return await entities.FirstOrDefaultAsync(e => e.Id == id, cancellation).ConfigureAwait(false);
                 default:
                     throw new InvalidOperationException("Data source defenition failed.");
             }
