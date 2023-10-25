@@ -27,7 +27,7 @@ namespace WeatherCollector.DAL.Repositories
 
             DbSet.Entry(entity).State = EntityState.Added;
             if (AutoSaveChanges)
-            await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
+                await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
             return entity;
         }
 
@@ -38,7 +38,7 @@ namespace WeatherCollector.DAL.Repositories
 
             DbSet.Entry(entity).State = EntityState.Deleted;
             if (AutoSaveChanges)
-            await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
+                await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
             return entity;
         }
 
@@ -106,16 +106,21 @@ namespace WeatherCollector.DAL.Repositories
             return await Entities.CountAsync();
         }
         
-        protected record Page(IEnumerable<T> Entities, int Index, int Size, int TotalEntitiesCount) : IPage<T>
+        protected record Page(IEnumerable<T> Items, int Index, int Size, int TotalItemsCount) : IPage<T>
         {
-            public int TotalPagesCount => (int)Math.Ceiling((double)TotalEntitiesCount / Size);
+            public int TotalPagesCount => (int)Math.Ceiling((double)TotalItemsCount / Size);
         }
 
         public async Task<IPage<T>> GetPage(int index, int size, CancellationToken cancellation = default)
         {
             if (size <= 0) return new Page(Enumerable.Empty<T>(), index, size, size);
 
-            var query = Entities;
+            IQueryable<T> query = Entities switch
+            {
+                IOrderedQueryable<T> orderedQuery => orderedQuery,
+                { } q => q.OrderBy(e => e.Id),
+            };
+
             var totalEntitiesCount = await query.CountAsync().ConfigureAwait(false);
             if (totalEntitiesCount == 0) new Page(Enumerable.Empty<T>(), index, 0, totalEntitiesCount);
             if (index * size > totalEntitiesCount) new Page(Enumerable.Empty<T>(), index, 0, totalEntitiesCount);
@@ -133,7 +138,7 @@ namespace WeatherCollector.DAL.Repositories
 
             DbSet.Entry(entity).State = EntityState.Modified;
             if (AutoSaveChanges)
-            await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
+                await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
             return entity;
         }
 

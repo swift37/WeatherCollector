@@ -29,13 +29,13 @@ namespace WeatherCollector.Interfaces.Repositories
 
     public interface IPage<out T>
     {
-        IEnumerable<T> Entities { get; }
+        IEnumerable<T> Items { get; }
 
         int Index { get; }
 
         int Size { get; }
 
-        int TotalEntitiesCount { get; }
+        int TotalItemsCount { get; }
 
         int TotalPagesCount { get; }
     }
