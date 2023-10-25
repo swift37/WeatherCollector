@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using WeatherCollector.DAL;
 using WeatherCollector.DAL.Context;
+using WeatherCollector.DAL.Repositories;
+using WeatherCollector.Interfaces.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DbConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString, opt => opt.MigrationsAssembly("WeatherCollector.DAL.SQLServer")));
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
+builder.Services.AddScoped(typeof(INamedRepository<>), typeof(DbNamedRepository<>));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
