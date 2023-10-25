@@ -57,7 +57,7 @@ namespace WeatherCollector.DAL.Repositories
             return await Entities.AnyAsync(e => e.Id == entity.Id, cancellation).ConfigureAwait(false);
         }
 
-        public async Task<bool> ExistbyId(int id, CancellationToken cancellation = default)
+        public async Task<bool> ExistById(int id, CancellationToken cancellation = default)
         {
             return await Entities.AnyAsync(e => e.Id == id, cancellation).ConfigureAwait(false);
         }
@@ -75,22 +75,26 @@ namespace WeatherCollector.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<T>> GetAll(CancellationToken cancellation = default)
-        {
-            return await Entities.ToArrayAsync(cancellation).ConfigureAwait(false);
-        }
-
-        public async Task<IEnumerable<T>> GetAll(int skip, int count, CancellationToken cancellation = default)
+        public async Task<IEnumerable<T>> Get(int skip, int count, CancellationToken cancellation = default)
         {
             var entitiesCount = await GetCount();
 
             if (count <= 0 || skip >= entitiesCount || entitiesCount - skip < count) Enumerable.Empty<T>();
 
-            var entities = Entities;
+            IQueryable<T> query = Entities switch
+            {
+                IOrderedQueryable<T> orderedQuery => orderedQuery,
+                { } q => q.OrderBy(e => e.Id),
+            };
 
-            if (skip > 0) entities.Skip(skip);
+            if (skip > 0) query = query.Skip(skip);
 
-            return await entities.Take(count).ToArrayAsync(cancellation).ConfigureAwait(false);
+            return await query.Take(count).ToArrayAsync(cancellation).ConfigureAwait(false);
+        }
+
+        public async Task<IEnumerable<T>> GetAll(CancellationToken cancellation = default)
+        {
+            return await Entities.ToArrayAsync(cancellation).ConfigureAwait(false);
         }
 
         public async Task<int> GetCount(CancellationToken cancellation = default)

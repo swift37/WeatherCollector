@@ -4,7 +4,7 @@ namespace WeatherCollector.Interfaces.Repositories
 {
     public interface IRepository<T> where T : IEntity
     {
-        Task<bool> ExistbyId(int id, CancellationToken cancellation = default);
+        Task<bool> ExistById(int id, CancellationToken cancellation = default);
 
         Task<bool> Exist(T? entity, CancellationToken cancellation = default);
 
@@ -12,7 +12,7 @@ namespace WeatherCollector.Interfaces.Repositories
 
         Task<IEnumerable<T>> GetAll(CancellationToken cancellation = default);
 
-        Task<IEnumerable<T>> GetAll(int skip, int count, CancellationToken cancellation = default);
+        Task<IEnumerable<T>> Get(int skip, int count, CancellationToken cancellation = default);
 
         Task<IPage<T>> GetPage(int index, int size, CancellationToken cancellation = default);
 
