@@ -18,7 +18,7 @@ namespace WeatherCollector.Interfaces.Repositories
 
         Task<T?> Get(int id, CancellationToken cancellation = default);
 
-        Task<T?> Add(T? entity, CancellationToken cancellation = default);
+        Task<T?> Create(T? entity, CancellationToken cancellation = default);
 
         Task<T?> Update(T? entity, CancellationToken cancellation = default);
 

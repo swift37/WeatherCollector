@@ -9,7 +9,7 @@ namespace WeatherCollector.Clients.Repositories
 
         public WebRepository(HttpClient client) => _client = client;
 
-        public Task<T?> Add(T? entity, CancellationToken cancellation = default)
+        public Task<T?> Create(T? entity, CancellationToken cancellation = default)
         {
             throw new NotImplementedException();
         }

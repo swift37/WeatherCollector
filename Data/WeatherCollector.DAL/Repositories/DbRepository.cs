@@ -13,7 +13,7 @@ namespace WeatherCollector.DAL.Repositories
 
         protected virtual IQueryable<T> Entities => DbSet;
 
-        public bool AutoSaveChanges {  get; set; }
+        public bool AutoSaveChanges { get; set; } = true;
 
         public DbRepository(AppDbContext context)
         {
@@ -21,7 +21,7 @@ namespace WeatherCollector.DAL.Repositories
             DbSet = context.Set<T>();
         }
 
-        public async Task<T?> Add(T? entity, CancellationToken cancellation = default)
+        public async Task<T?> Create(T? entity, CancellationToken cancellation = default)
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
