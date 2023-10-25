@@ -47,7 +47,7 @@ namespace WeatherCollector.API.Controllers
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// GET /datasources/exist
+        /// POST /datasources/exist
         /// {
         ///     Id: 1,
         ///     Name: "Source",
@@ -58,7 +58,7 @@ namespace WeatherCollector.API.Controllers
         /// <returns>Returns bool</returns>
         /// <response code="200">Success</response>
         /// <response code="404">Not Found</response>
-        [HttpGet("exist")]
+        [HttpPost("exist")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(bool))]
         public async Task<ActionResult<bool>> Exist(DataSource dataSource) =>
@@ -125,6 +125,7 @@ namespace WeatherCollector.API.Controllers
         /// <param name="size">Page size</param>
         /// <returns>Returns IPage<DataSource></returns>
         /// <response code="200">Success</response>
+        /// <response code="404">Not Found</response>
         [HttpGet("page/{index:int}/{size:int}")]
         [HttpGet("page[[{index:int}:{size:int}]]")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IPage<DataSource>))]
@@ -156,7 +157,7 @@ namespace WeatherCollector.API.Controllers
         {
             var createdSource = await _repository.Create(dataSource);
 
-            return CreatedAtAction(nameof(Get), new { id = createdSource?.Id });
+            return CreatedAtAction(nameof(Get), new { id = createdSource?.Id }, dataSource);
         }
 
         /// <summary>
@@ -183,7 +184,7 @@ namespace WeatherCollector.API.Controllers
             if (await _repository.Update(dataSource) is not { } updatedSource) 
                 return NotFound();
 
-            return AcceptedAtAction(nameof(Get), new { id = updatedSource.Id });
+            return AcceptedAtAction(nameof(Get), new { id = updatedSource.Id }, updatedSource);
         }
 
         /// <summary>
