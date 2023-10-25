@@ -109,9 +109,9 @@ namespace WeatherCollector.API.Controllers.Base
         /// <param name="count">Number of elements to be received</param>
         /// <returns>Returns IEnumerable<T></returns>
         /// <response code="200">Success</response>
-        [HttpGet("items[[{skip:int}:{count:int}]]")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<T>>> Get(int skip, int count) =>
+        public async Task<ActionResult<IEnumerable<T>>> Get([FromQuery] int skip, [FromQuery] int count) =>
             Ok(await _repository.Get(skip, count));
 
         /// <summary>
@@ -126,11 +126,10 @@ namespace WeatherCollector.API.Controllers.Base
         /// <returns>Returns IPage<T></returns>
         /// <response code="200">Success</response>
         /// <response code="404">Not Found</response>
-        [HttpGet("page/{index:int}/{size:int}")]
-        [HttpGet("page[[{index:int}:{size:int}]]")]
+        [HttpGet("page")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IPage<T>>> GetPage(int index, int size)
+        public async Task<ActionResult<IPage<T>>> GetPage([FromQuery] int index,[FromQuery] int size)
         {
             var page = await _repository.GetPage(index, size);
 
