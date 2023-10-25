@@ -12,6 +12,8 @@ namespace WeatherCollector.DAL.EntityTypeConfigurations
                 .HasMany<DataValue>()
                 .WithOne(v => v.Source)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(s => s.Name).IsUnique();
         }
     }
 }

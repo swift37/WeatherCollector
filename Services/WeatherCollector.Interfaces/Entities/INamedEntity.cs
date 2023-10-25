@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WeatherCollector.Interfaces.Base
+namespace WeatherCollector.Interfaces.Entities
 {
     public interface INamedEntity : IEntity
     {
