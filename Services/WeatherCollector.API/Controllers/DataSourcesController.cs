@@ -12,7 +12,17 @@ namespace WeatherCollector.API.Controllers
 
         public DataSourcesController(IRepository<DataSource> repository) => _repository = repository;
 
+        /// <summary>
+        /// Get count of data sources
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// GET /count
+        /// </remarks>
+        /// <returns>Returns int</returns>
+        /// <response code="200">Success</response>
         [HttpGet("count")]
-        public async Task<IActionResult> GetItemsCount() => Ok(await _repository.GetCount());
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+        public async Task<ActionResult<int>> GetItemsCount() => Ok(await _repository.GetCount());
     }
 }
