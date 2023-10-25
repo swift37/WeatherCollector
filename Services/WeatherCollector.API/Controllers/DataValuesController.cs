@@ -6,8 +6,8 @@ using WeatherCollector.Interfaces.Repositories;
 namespace WeatherCollector.API.Controllers
 {
     [Produces("application/json")]
-    public class DataSourcesController : EntityController<DataSource>
+    public class DataValuesController : EntityController<DataValue>
     {
-        public DataSourcesController(IRepository<DataSource> repository) : base(repository) { }
+        public DataValuesController(IRepository<DataValue> repository) : base(repository) { }
     }
 }
