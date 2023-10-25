@@ -13,6 +13,8 @@ namespace WeatherCollector.DAL.Repositories
 
         protected virtual IQueryable<T> Entities => DbSet;
 
+        public bool AutoSaveChanges {  get; set; }
+
         public DbRepository(AppDbContext context)
         {
             _context = context;
@@ -24,6 +26,7 @@ namespace WeatherCollector.DAL.Repositories
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
             DbSet.Entry(entity).State = EntityState.Added;
+            if (AutoSaveChanges)
             await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
             return entity;
         }
@@ -34,6 +37,7 @@ namespace WeatherCollector.DAL.Repositories
             if (!await Exist(entity, cancellation)) return null;
 
             DbSet.Entry(entity).State = EntityState.Deleted;
+            if (AutoSaveChanges)
             await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
             return entity;
         }
@@ -128,8 +132,14 @@ namespace WeatherCollector.DAL.Repositories
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
             DbSet.Entry(entity).State = EntityState.Modified;
+            if (AutoSaveChanges)
             await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
             return entity;
+        }
+
+        public async Task<int> SaveChanges(CancellationToken cancellation = default)
+        {
+            return await _context.SaveChangesAsync(cancellation).ConfigureAwait(false);
         }
     }
 }
