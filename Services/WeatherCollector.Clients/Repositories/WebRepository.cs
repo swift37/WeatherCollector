@@ -1,4 +1,5 @@
-﻿using WeatherCollector.Interfaces.Entities;
+﻿using System.Net;
+using WeatherCollector.Interfaces.Entities;
 using WeatherCollector.Interfaces.Repositories;
 
 namespace WeatherCollector.Clients.Repositories
@@ -8,6 +9,17 @@ namespace WeatherCollector.Clients.Repositories
         private readonly HttpClient _client;
 
         public WebRepository(HttpClient client) => _client = client;
+
+        public async Task<bool> ExistById(int id, CancellationToken cancellation = default)
+        {
+            var response = await _client.GetAsync($"exist/{id}", cancellation).ConfigureAwait(false);
+            return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
+        }
+
+        public Task<bool> Exist(T? entity, CancellationToken cancellation = default)
+        {
+            throw new NotImplementedException();
+        }
 
         public Task<T?> Create(T? entity, CancellationToken cancellation = default)
         {
@@ -20,16 +32,6 @@ namespace WeatherCollector.Clients.Repositories
         }
 
         public Task<T?> DeleteById(int id, CancellationToken cancellation = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> Exist(T? entity, CancellationToken cancellation = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> ExistById(int id, CancellationToken cancellation = default)
         {
             throw new NotImplementedException();
         }
