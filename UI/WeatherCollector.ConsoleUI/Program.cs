@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Hosting;
 using Polly.Extensions.Http;
 using Polly;
+using WeatherCollector.Interfaces.Repositories;
+using WeatherCollector.DAL.Entities;
+using WeatherCollector.Clients.Repositories;
 
 class Program
 {
@@ -15,7 +18,18 @@ class Program
         .CreateDefaultBuilder()
         .ConfigureServices(ConfigureServices);
 
-    private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) { }
+    private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) 
+    {
+        services.AddHttpClient<IRepository<DataSource>, WebRepository<DataSource>>(client =>
+        {
+            client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/DataSources/");
+        });
+
+        services.AddHttpClient<IRepository<DataValue>, WebRepository<DataValue>>(client =>
+        {
+            client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/DataValues/");
+        });
+    }
 
     public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
     {

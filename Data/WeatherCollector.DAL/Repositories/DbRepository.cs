@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WeatherCollector.DAL.Context;
 using WeatherCollector.DAL.Entities.Base;
+using WeatherCollector.Interfaces;
 using WeatherCollector.Interfaces.Repositories;
 
 namespace WeatherCollector.DAL.Repositories
@@ -13,7 +14,7 @@ namespace WeatherCollector.DAL.Repositories
 
         protected virtual IQueryable<T> Entities => DbSet;
 
-        public bool AutoSaveChanges {  get; set; }
+        public bool AutoSaveChanges { get; set; } = true;
 
         public DbRepository(AppDbContext context)
         {
@@ -21,7 +22,7 @@ namespace WeatherCollector.DAL.Repositories
             DbSet = context.Set<T>();
         }
 
-        public async Task<T?> Add(T? entity, CancellationToken cancellation = default)
+        public async Task<T?> Create(T? entity, CancellationToken cancellation = default)
         {
             if (entity is null) throw new ArgumentNullException(nameof(entity));
 
@@ -45,7 +46,8 @@ namespace WeatherCollector.DAL.Repositories
         public async Task<T?> DeleteById(int id, CancellationToken cancellation = default)
         {
             var entity = DbSet.Local.FirstOrDefault(e => e.Id == id);
-            if (entity is null) await DbSet
+
+            if (entity is null) entity = await DbSet
                     .Select(e => new T { Id = e.Id })
                     .FirstOrDefaultAsync(e => e.Id == id, cancellation)
                     .ConfigureAwait(false);
@@ -113,8 +115,6 @@ namespace WeatherCollector.DAL.Repositories
 
         public async Task<IPage<T>> GetPage(int index, int size, CancellationToken cancellation = default)
         {
-            if (size <= 0) return new Page(Enumerable.Empty<T>(), index, size, size);
-
             IQueryable<T> query = Entities switch
             {
                 IOrderedQueryable<T> orderedQuery => orderedQuery,
@@ -122,6 +122,8 @@ namespace WeatherCollector.DAL.Repositories
             };
 
             var totalEntitiesCount = await query.CountAsync().ConfigureAwait(false);
+
+            if (size <= 0) return new Page(Enumerable.Empty<T>(), index, size, totalEntitiesCount);
             if (totalEntitiesCount == 0) new Page(Enumerable.Empty<T>(), index, 0, totalEntitiesCount);
             if (index * size > totalEntitiesCount) new Page(Enumerable.Empty<T>(), index, 0, totalEntitiesCount);
 
