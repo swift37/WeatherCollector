@@ -46,7 +46,8 @@ namespace WeatherCollector.DAL.Repositories
         public async Task<T?> DeleteById(int id, CancellationToken cancellation = default)
         {
             var entity = DbSet.Local.FirstOrDefault(e => e.Id == id);
-            if (entity is null) await DbSet
+
+            if (entity is null) entity = await DbSet
                     .Select(e => new T { Id = e.Id })
                     .FirstOrDefaultAsync(e => e.Id == id, cancellation)
                     .ConfigureAwait(false);
@@ -114,8 +115,6 @@ namespace WeatherCollector.DAL.Repositories
 
         public async Task<IPage<T>> GetPage(int index, int size, CancellationToken cancellation = default)
         {
-            if (size <= 0) return new Page(Enumerable.Empty<T>(), index, size, size);
-
             IQueryable<T> query = Entities switch
             {
                 IOrderedQueryable<T> orderedQuery => orderedQuery,
@@ -123,6 +122,8 @@ namespace WeatherCollector.DAL.Repositories
             };
 
             var totalEntitiesCount = await query.CountAsync().ConfigureAwait(false);
+
+            if (size <= 0) return new Page(Enumerable.Empty<T>(), index, size, totalEntitiesCount);
             if (totalEntitiesCount == 0) new Page(Enumerable.Empty<T>(), index, 0, totalEntitiesCount);
             if (index * size > totalEntitiesCount) new Page(Enumerable.Empty<T>(), index, 0, totalEntitiesCount);
 
