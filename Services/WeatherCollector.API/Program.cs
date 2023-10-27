@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using WeatherCollector.DAL;
 using WeatherCollector.DAL.Context;
 using WeatherCollector.DAL.Repositories;
@@ -17,6 +18,9 @@ builder.Services.AddScoped(typeof(INamedRepository<>), typeof(DbNamedRepository<
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
 
@@ -40,6 +44,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseSerilogRequestLogging();
 
 app.UseRouting();
 app.UseHttpsRedirection();
