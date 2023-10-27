@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WeatherCollector.Interfaces;
 using WeatherCollector.Interfaces.Entities;
 using WeatherCollector.Interfaces.Repositories;
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WeatherCollector.DAL.Context;
 using WeatherCollector.DAL.Entities.Base;
+using WeatherCollector.Interfaces;
 using WeatherCollector.Interfaces.Repositories;
 
 namespace WeatherCollector.DAL.Repositories

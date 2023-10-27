@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using WeatherCollector.DAL.Entities.Base;
+using WeatherCollector.Interfaces;
 using WeatherCollector.Interfaces.Entities;
 using WeatherCollector.Interfaces.Repositories;
 
