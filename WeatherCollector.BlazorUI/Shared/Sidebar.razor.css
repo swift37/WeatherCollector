@@ -102,7 +102,7 @@ body.night header .toggle {
     margin-top: 2em;
 }
 
-.nav-link, .mode {
+::deep .nav-link, .mode {
     display: flex;
     align-items: center;
     height: 50px;
@@ -113,16 +113,20 @@ body.night header .toggle {
     transition: all 0.4s ease;
 }
 
-    .nav-link:hover {
+    ::deep .nav-link:hover {
         background-color: var(--primary-color);
     }
 
-    .nav-link .icon {
+    ::deep .nav-link .icon {
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 20px;
         min-width: 60px;
+    }
+
+    ::deep .nav-link.active {
+        background-color: var(--primary-color);
     }
 
 :where(.nav-link, .mode) :where(.icon, .text) {
@@ -134,7 +138,15 @@ body.night header .toggle {
     color: var(--sidebar-color);
 }
 
+.nav-link.active :where(.icon, .text) {
+    color: var(--sidebar-color);
+}
+
 body.night .nav-link:hover :where(.icon, .text) {
+    color: var(--text-color);
+}
+
+body.night .nav-link.active :where(.icon, .text) {
     color: var(--text-color);
 }
 
