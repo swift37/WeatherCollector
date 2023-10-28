@@ -7,12 +7,12 @@
       "destination": "wwwroot/lib-blazor/jquery/"
     },
     {
-      "library": "twitter-bootstrap@5.3.2",
-      "destination": "wwwroot/lib-blazor/bootstrap/"
-    },
-    {
       "library": "font-awesome@6.4.2",
       "destination": "wwwroot/lib-blazor/font-awesome/"
+    },
+    {
+      "library": "boxicons@2.1.4",
+      "destination": "wwwroot/lib-blazor/boxicons/"
     },
     {
       "library": "open-iconic@1.1.1",
