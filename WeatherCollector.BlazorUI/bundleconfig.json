@@ -4,5 +4,11 @@
       "Styles/app.css"
     ],
     "outputFileName": "wwwroot/css/app.css"
+  },
+  {
+    "inputFiles": [
+      "Scripts/sidebar.js"
+    ],
+    "outputFileName": "wwwroot/scripts/sidebar.js"
   }
 ]

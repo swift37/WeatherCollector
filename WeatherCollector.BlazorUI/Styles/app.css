@@ -17,6 +17,30 @@
     font-family: 'Poppins', sans-serif;
 }
 
+body.night {
+    --body-color: #18191a;
+    --sidebar-color: #242526;
+    --primary-color: #3a3b3c;
+    --primary-color-light: #3a3b3c;
+    --toggle-color: #fff;
+    --text-color: #ccc;
+}
+
+.screen {
+    position: relative;
+    left: 250px;
+    height: 100vh;
+    width: calc(100% - 250px);
+    padding: 8px 40px;
+    background: var(--body-color);
+    transition: all 0.4s ease;
+}
+
+.sidebar.minimized ~ .screen {
+    left: 88px;
+    width: calc(100% - 88px);
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
