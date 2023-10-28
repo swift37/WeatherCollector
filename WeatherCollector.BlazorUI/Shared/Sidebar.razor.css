@@ -1,1 +1,162 @@
-﻿
+﻿.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding: 10px 14px;
+    background-color: var(--sidebar-color);
+}
+
+.text {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+header {
+    position: relative;
+}
+
+header img {
+    width: 40px;
+    border-radius: 6px;
+}
+
+header .content {
+    display: flex;
+    align-items: center;
+}
+
+header .content .text-header {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.text-header .title {
+    font-weight: 600;
+}
+
+.text-header .subtitle {
+    margin-top: -2px;
+}
+
+header .toggle {
+    position: absolute;
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: var(--sidebar-color);
+    font-size: 22px;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.menu-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 50px);
+}
+
+.menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    margin-top: 1em;
+}
+
+.nav-link, .mode {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    width: 100%;
+    border-radius: 6px;
+    text-decoration: none;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+    .nav-link:hover {
+        background-color: var(--primary-color);
+    }
+
+    .nav-link .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        width: 60px;
+    }
+
+    .nav-link :where(.icon, .text) {
+        color: var(--text-color);
+        transition: all 0.2s ease;
+    }
+
+    .nav-link:hover :where(.icon, .text) {
+        color: var(--sidebar-color);
+    }
+
+.mode {
+    background-color: var(--primary-color-light)
+}
+
+    .mode .icons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50px;
+        width: 60px;
+    }
+
+    .mode i {
+        position: absolute;
+        font-size: 20px;
+    }
+
+        .mode i.sun {
+            opacity: 0;
+        }
+
+.toggle-switch {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 60px;
+    cursor: pointer;
+}
+
+    .toggle-switch .switch {
+        position: relative;
+        height: 22px;
+        width: 44px;
+        border-radius: 25px;
+        background-color: var(--toggle-color);
+    }
+
+    .toggle-switch .switch::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: var(--sidebar-color);
+    }
