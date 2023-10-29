@@ -6,6 +6,6 @@ namespace WeatherCollector.API.Infrastructure.Mapping
 {
     public class DataSourceMappingProfile : Profile
     {
-        public DataSourceMappingProfile() => CreateMap<DataSourceInfo, DataSource>().ReverseMap();
+        public DataSourceMappingProfile() => CreateMap<Source, DataSource>().ReverseMap();
     }
 }
