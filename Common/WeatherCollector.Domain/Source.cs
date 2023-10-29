@@ -2,7 +2,7 @@
 
 namespace WeatherCollector.Domain
 {
-    public class DataSourceInfo : INamedEntity
+    public class Source : INamedEntity
     {
         public int Id { get; set; }
 

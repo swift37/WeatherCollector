@@ -2,7 +2,7 @@
 
 namespace WeatherCollector.Domain
 {
-    public class DataValueInfo: INamedEntity
+    public class Property: INamedEntity
     {
         public int Id { get; set; }
 
@@ -12,7 +12,7 @@ namespace WeatherCollector.Domain
 
         public string? Value { get; set; }
 
-        public DataSourceInfo? Source { get; set; }
+        public Source? Source { get; set; }
 
         public bool IsFault { get; set; }
     }

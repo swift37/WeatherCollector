@@ -58,6 +58,7 @@ header .content .text-header {
 }
 
 .text-header .subtitle {
+    font-size: 14px;
     margin-top: -2px;
 }
 
