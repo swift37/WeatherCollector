@@ -4,13 +4,13 @@ namespace WeatherCollector.Domain
 {
     public class Page<T> : IPage<T>
     {
-        public IEnumerable<T> Items { get; init; } = Enumerable.Empty<T>();
+        public IEnumerable<T> Items { get; set; } = Enumerable.Empty<T>();
 
-        public int Index { get; init; }
+        public int Index { get; set; }
 
-        public int Size { get; init; }
+        public int Size { get; set; }
 
-        public int TotalItemsCount { get; init; }
+        public int TotalItemsCount { get; set; }
 
         public int TotalPagesCount => (int)Math.Ceiling((double)TotalItemsCount / Size);
     }

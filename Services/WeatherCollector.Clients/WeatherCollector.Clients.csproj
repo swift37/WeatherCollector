@@ -1,17 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>11.0</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WeatherCollector.API\WeatherCollector.API.csproj" />
+    <ProjectReference Include="..\..\Common\WeatherCollector.Domain\WeatherCollector.Domain.csproj" />
     <ProjectReference Include="..\WeatherCollector.Interfaces\WeatherCollector.Interfaces.csproj" />
   </ItemGroup>
 
