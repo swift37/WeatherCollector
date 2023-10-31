@@ -5,12 +5,14 @@ namespace WeatherCollector.Domain
     public class Property: INamedEntity, IEquatable<Property>
     {
         public int Id { get; set; }
-
+        
         public string? Name { get; set; }
 
         public DateTimeOffset Time { get; set; } = DateTimeOffset.Now;
 
         public string? Value { get; set; }
+
+        public City? City { get; set; }
 
         public Source? Source { get; set; }
 
