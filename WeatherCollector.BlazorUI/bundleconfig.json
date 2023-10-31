@@ -10,5 +10,11 @@
       "Scripts/sidebar.js"
     ],
     "outputFileName": "wwwroot/scripts/sidebar.js"
+  },
+  {
+    "inputFiles": [
+      "appsettings.json"
+    ],
+    "outputFileName": "wwwroot/appsettings.json"
   }
 ]

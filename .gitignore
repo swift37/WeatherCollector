@@ -366,3 +366,4 @@ FodyWeavers.xsd
 **/wwwroot/lib-*
 /WeatherCollector.BlazorUI/wwwroot/css
 /WeatherCollector.BlazorUI/wwwroot/scripts
+/WeatherCollector.BlazorUI/wwwroot/appsettings.json
