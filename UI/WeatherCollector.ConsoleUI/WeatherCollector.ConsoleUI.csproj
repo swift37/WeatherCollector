@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Data\WeatherCollector.DAL\WeatherCollector.DAL.csproj" />
     <ProjectReference Include="..\..\Services\WeatherCollector.Clients\WeatherCollector.Clients.csproj" />
   </ItemGroup>
 
