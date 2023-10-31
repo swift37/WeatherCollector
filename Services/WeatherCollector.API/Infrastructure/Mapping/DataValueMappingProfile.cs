@@ -6,7 +6,9 @@ namespace WeatherCollector.API.Infrastructure.Mapping
 {
     public class DataValueMappingProfile: Profile
     {
-        public DataValueMappingProfile() => CreateMap<Property, DataValue>().ReverseMap();
+        public DataValueMappingProfile() => CreateMap<Property, DataValue>()
+            .ForMember(dest => dest.Object, act => act.MapFrom(src => src.City))
+            .ReverseMap();
 
     }
 }
