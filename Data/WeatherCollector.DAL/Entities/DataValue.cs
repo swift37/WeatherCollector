@@ -8,6 +8,8 @@ namespace WeatherCollector.DAL.Entities
 
         public string? Value { get; set; }
 
+        public DataObject? Object { get; set; }
+
         public DataSource? Source { get; set; }
 
         public bool IsFault { get; set; }
