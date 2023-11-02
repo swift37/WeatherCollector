@@ -1,3 +1,36 @@
 ﻿@page "/"
+@using MetaWeather.Models;
+@using WeatherCollector.Domain
+@using MetaWeather;
+@inject AstroWeatherClient _client;
 
 <h1>Welcome!</h1>
+@if (_sources is { } sources)
+{
+    @foreach (var item in _sources)
+    {
+        <p>@item.City</p>
+        <p>@item.Country</p>
+        <p>@item.Latitude</p>
+        <p>@item.Longitude</p>
+        <br />
+    }
+
+}
+else
+{
+    <p>Loading...</p>
+}
+
+<button @onclick="async () => await Load()">Load</button>
+
+@code {
+    private ICollection<GeoData>? _sources;
+
+    protected override async Task OnInitializedAsync() => await Load("Warsaw");
+
+    private async Task Load(string? city = "Warsaw")
+    {
+        _sources = await _client.GetGeoData(city);
+    }
+}

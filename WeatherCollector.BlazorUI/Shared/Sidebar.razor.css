@@ -195,6 +195,7 @@ body.night .mode i.moon {
     height: 100%;
     width: 60px;
     cursor: pointer;
+    border-radius: 6px;
     background-color: var(--primary-color-light);
     transition: all 0.4s ease;
 }
