@@ -111,6 +111,7 @@ body.night header .toggle {
     border-radius: 6px;
     text-decoration: none;
     outline: none;
+    overflow: hidden;
     transition: all 0.4s ease;
 }
 
