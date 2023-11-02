@@ -6,6 +6,7 @@
     --sidebar-color: #fff;
     --primary-color: #695cfe;
     --primary-color-light: #f6f5ff;
+    --separator-light-color: #ddd;
     --toggle-color: #ddd;
     --text-color: #717171;
 }
@@ -22,8 +23,82 @@ body.night {
     --sidebar-color: #242526;
     --primary-color: #3a3b3c;
     --primary-color-light: #3a3b3c;
+    --separator-light-color: #3a3b3c;
     --toggle-color: #fff;
     --text-color: #ccc;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    width: 90%;
+    background: var(--sidebar-color);
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+    table thead tr {
+        background-color: var(--primary-color);
+        color: #ffffff;
+        text-align: left;
+        font-weight: bold;
+        transition: all 0.4s ease;
+    }
+
+    table :where(th, td) {
+        padding: 12px 30px;
+    }
+
+    table tbody tr {
+        border-bottom: 1px solid var(--separator-light-color);
+    }
+
+        table tbody tr:nth-of-type(even) {
+            background-color: var(--primary-color-light);
+        }
+
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        table tbody tr.selected {
+            font-weight: 600;
+            color: var(--primary-color);
+            transition: all 0.4s ease;
+        }
+
+@media only screen and (max-width: 767px) {
+    table {
+        width: 100%;
+    }
+
+        table :where(tbody, tr, td, th) {
+            width: auto !important;
+            display: block !important;
+        }
+
+        table tr {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+
+        table :where(th, td) {
+            padding: 4px 12px !important;
+        }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.container.centered {
+    align-items: center;
 }
 
 .screen {
