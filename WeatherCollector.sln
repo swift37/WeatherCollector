@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{E4BA87A1-665D-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherCollector.ConsoleUI", "UI\WeatherCollector.ConsoleUI\WeatherCollector.ConsoleUI.csproj", "{1BE2F9A7-BFC0-48C0-B7CA-872B1957C9AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherCollector.BlazorUI", "WeatherCollector.BlazorUI\WeatherCollector.BlazorUI.csproj", "{DDF4F388-BB54-4BCC-A6E9-C2A482A2E719}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherCollector.BlazorUI", "WeatherCollector.BlazorUI\WeatherCollector.BlazorUI.csproj", "{DDF4F388-BB54-4BCC-A6E9-C2A482A2E719}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

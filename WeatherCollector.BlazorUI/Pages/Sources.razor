@@ -1,3 +1,62 @@
 ﻿@page "/sources"
+@using WeatherCollector.Interfaces.Repositories;
+@using WeatherCollector.Domain;
+@inject IRepository<Source> _repository;
 
-<h3>Sources</h3>
+<div class="head-container">
+    <div class="search-bar">
+        <i class="bx bx-search"></i>
+        <input type="text" placeholder="Search..." />
+    </div>
+
+    <button class="add-btn">
+        Add a new source
+    </button>
+</div>
+
+<div class="container centered">
+    @if (_sources is { } sources)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Details</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var source in sources)
+                {
+                    <tr>
+                        <td>@source.Id</td>
+                        <td>@source.Name</td>
+                        <td>@source.Details</td>
+                        <td class="actions">
+                            <button class="edit-btn">
+                                <i class='bx bx-edit'></i>
+                            </button>
+                            <button class="remove-btn">
+                                <i class='bx bx-trash-alt'></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
+</div>
+
+@code {
+    private IEnumerable<Source>? _sources;
+
+    protected override async Task OnInitializedAsync() => await Load();
+
+    private async Task Load() => _sources = await _repository.GetAll();
+
+}

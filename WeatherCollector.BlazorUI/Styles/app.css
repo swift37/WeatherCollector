@@ -56,10 +56,6 @@ table {
         border-bottom: 1px solid var(--separator-light-color);
     }
 
-        table tbody tr:nth-of-type(even) {
-            background-color: var(--primary-color-light);
-        }
-
         table tbody tr:last-of-type {
             border-bottom: 2px solid var(--primary-color);
         }
@@ -70,23 +66,57 @@ table {
             transition: all 0.4s ease;
         }
 
+    table th.actions {
+        width: 150px;
+    }
+
+    table td.actions {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.5em;
+    }
+
+        table td.actions button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--primary-color);
+            border: none;
+            outline: none;
+            color: #fff;
+            border-radius: 6px;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        table td.actions button.remove-btn {
+            background: #cc0000;
+        }
+
 @media only screen and (max-width: 767px) {
     table {
         width: 100%;
     }
 
-        table :where(tbody, tr, td, th) {
+        table :where(tbody, tr, th), td:not(.actions) {
             width: auto !important;
             display: block !important;
         }
 
         table tr {
-            padding-top: 15px;
-            padding-bottom: 15px;
+            padding: 15px 8px;
         }
 
         table :where(th, td) {
             padding: 4px 12px !important;
+        }
+
+        table td.actions {
+            justify-content: flex-end;
         }
 }
 
@@ -101,12 +131,26 @@ table {
     align-items: center;
 }
 
+.head-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media only screen and (max-width: 767px) {
+    .head-container {
+        justify-content: flex-end;
+        flex-wrap: wrap-reverse;
+        gap: 1em;
+    }
+}
+
 .screen {
     position: relative;
     left: 250px;
     height: 100vh;
     width: calc(100% - 250px);
-    padding: 8px 40px;
+    padding: 25px 50px;
     background: var(--body-color);
     transition: all 0.4s ease;
 }
@@ -229,7 +273,7 @@ table {
     }
 
         .loading-progress circle:last-child {
-            stroke: #1b6ec2;
+            stroke: var(--primary-color);
             stroke-dasharray: calc(3.141 * var(--blazor-load-percentage, 0%) * 0.8), 500%;
             transition: stroke-dasharray 0.05s ease-in-out;
         }
