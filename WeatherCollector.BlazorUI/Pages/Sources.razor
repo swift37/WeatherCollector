@@ -37,7 +37,7 @@
                             <button class="edit-btn">
                                 <i class='bx bx-edit'></i>
                             </button>
-                            <button class="remove-btn">
+                            <button class="remove-btn" @onclick="() => Delete(source)">
                                 <i class='bx bx-trash-alt'></i>
                             </button>
                         </td>
@@ -53,7 +53,7 @@
 </div>
 
 @code {
-    private IEnumerable<Source>? _sources;
+    private IList<Source>? _sources;
 
     private string? _filter;
 
@@ -65,6 +65,15 @@
 
     protected override async Task OnInitializedAsync() => await Load();
 
-    private async Task Load() => _sources = await _repository.GetAll();
+    private async Task Load() => _sources = (await _repository.GetAll()).ToList();
+
+    private async Task Delete(Source source)
+    {
+        if (_sources is not { Count: > 0 }) return;
+
+        var deletedSource = await _repository.Delete(source);
+        if (deletedSource is not null)
+            _sources.Remove(deletedSource);
+    }
 
 }
