@@ -4,7 +4,9 @@
 @using WeatherCollector.Domain;
 @inject IRepository<Source> _repository;
 
-<CreateSourceModal SourceCreated="(source) => Add(source)" @ref="_createSourceModal" />
+<CreateSourceModal SourceCreated="(source) => _sources?.Add(source)" @ref="_createSourceModal" />
+
+<UpdateSourceModal Source="_updatedSource" SourceUpdated="(source) => _updatedSource = source" @ref="_updateSourceModal" />
 
 <div class="head-container">
     <div class="search-bar">
@@ -37,7 +39,7 @@
                         <td>@source.Name</td>
                         <td>@source.Details</td>
                         <td class="actions">
-                            <button class="edit-btn">
+                            <button class="edit-btn" @onclick="() => Update(source)">
                                 <i class='bx bx-edit'></i>
                             </button>
                             <button class="remove-btn" @onclick="() => Delete(source)">
@@ -62,6 +64,10 @@
 
     private CreateSourceModal? _createSourceModal;
 
+    private UpdateSourceModal? _updateSourceModal;
+
+    private Source? _updatedSource;
+
     private IEnumerable<Source>? SortedSources =>
         string.IsNullOrWhiteSpace(_filter) ? _sources 
         : _sources?.Where(s => s.Id.ToString() == _filter 
@@ -72,7 +78,11 @@
 
     private async Task Load() => _sources = (await _repository.GetAll()).ToList();
 
-    private void Add(Source source) => _sources?.Add(source);
+    private void Update(Source source)
+    {
+        _updatedSource = source;
+        _updateSourceModal?.Open();
+    }
 
     private async Task Delete(Source? source)
     {

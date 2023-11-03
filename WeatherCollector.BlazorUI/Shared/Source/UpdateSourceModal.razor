@@ -11,16 +11,16 @@
                     <h2>Create a new source</h2>
                     <i class='bx bx-x' @onclick="Close"></i>
                 </header>
-                <EditForm Model="_newSourceModel" OnValidSubmit="Create">
+                <EditForm Model="Source" OnValidSubmit="Create">
                     <div class="field">
                         <label>Name</label>
-                        <InputText id="new-datasource-name" @bind-Value="_newSourceModel.Name" />
+                        <InputText id="new-datasource-name" @bind-Value="Source.Name" />
                     </div>
                     <div class="field">
                         <label>Details</label>
-                        <InputTextArea id="new-datasource-description" @bind-Value="_newSourceModel.Details" />
+                        <InputTextArea id="new-datasource-description" @bind-Value="Source.Details" />
                     </div>
-                    <button type="submit">Create</button>
+                    <button type="submit">Update</button>
                 </EditForm>
             </div>
         </div>
@@ -29,10 +29,12 @@
 
 
 @code {
-    private Source _newSourceModel = new();
+    [Parameter]
+    [EditorRequired]
+    public Source Source { get; set; } = new();
 
     [Parameter]
-    public EventCallback<Source> SourceCreated { get; set; }
+    public EventCallback<Source> SourceUpdated { get; set; }
 
     private bool _isOpened;
 
@@ -41,17 +43,17 @@
     public void Close()
     {
         _isOpened = false;
-        _newSourceModel = new();
+        Source = new();
     }
 
     private async Task Create()
     {
-        var createdSource = await _repository.Create(_newSourceModel);
-        if (createdSource is null) return;
+        var updatedSource = await _repository.Update(Source);
+        if (updatedSource is null) return;
 
-        await OnSourceCreated(createdSource);
+        await OnSourceUpdated(updatedSource);
         Close();
     }
 
-    private Task OnSourceCreated(Source source) => SourceCreated.InvokeAsync(source);
+    private Task OnSourceUpdated(Source source) => SourceUpdated.InvokeAsync(source);
 }
