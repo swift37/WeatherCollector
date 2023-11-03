@@ -5,10 +5,14 @@
     --body-color: #e4e9e7;
     --sidebar-color: #fff;
     --primary-color: #695cfe;
+    --primary-hover-color: #614cfe;
     --primary-color-light: #f6f5ff;
     --separator-light-color: #ddd;
     --toggle-color: #ddd;
     --text-color: #717171;
+    --text-hover-color: #171717;
+    --danger-color: #cc0000;
+    --danger-hover-color: #bb0000;
 }
 
 * {
@@ -22,10 +26,12 @@ body.night {
     --body-color: #18191a;
     --sidebar-color: #242526;
     --primary-color: #3a3b3c;
+    --primary-hover-color: #2a2b2c;
     --primary-color-light: #3a3b3c;
     --separator-light-color: #3a3b3c;
     --toggle-color: #fff;
     --text-color: #ccc;
+    --text-hover-color: #999;
 }
 
 table {
@@ -93,9 +99,17 @@ table {
             transition: all 0.4s ease;
         }
 
-        table td.actions button.remove-btn {
-            background: #cc0000;
-        }
+            table td.actions button:hover {
+                background-color: var(--primary-hover-color);
+            }
+
+            table td.actions button.remove-btn {
+                background: var(--danger-color);
+            }
+
+                table td.actions button.remove-btn:hover {
+                    background: var(--danger-hover-color);
+                }
 
 @media only screen and (max-width: 767px) {
     table {
@@ -201,7 +215,7 @@ table {
     }
 }
 
-.add-btn {
+.create-btn {
     align-self: flex-end;
     width: max-content;
     border: none;
@@ -214,6 +228,10 @@ table {
     cursor: pointer;
     transition: all 0.4s ease;
 }
+
+    .create-btn:hover {
+        background-color: var(--primary-hover-color);
+    }
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;

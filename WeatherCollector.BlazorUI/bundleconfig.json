@@ -7,6 +7,12 @@
   },
   {
     "inputFiles": [
+      "Styles/modal.css"
+    ],
+    "outputFileName": "wwwroot/css/modal.css"
+  },
+  {
+    "inputFiles": [
       "Scripts/sidebar.js"
     ],
     "outputFileName": "wwwroot/scripts/sidebar.js"
