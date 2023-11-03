@@ -6,7 +6,7 @@
 <div class="head-container">
     <div class="search-bar">
         <i class="bx bx-search"></i>
-        <input type="text" placeholder="Search..." />
+        <input type="text" @bind="_filter" @bind:event="oninput" placeholder="Search..." />
     </div>
 
     <button class="add-btn">
@@ -15,7 +15,7 @@
 </div>
 
 <div class="container centered">
-    @if (_sources is { } sources)
+    @if (SortedSources is { } sources)
     {
         <table>
             <thead>
@@ -54,6 +54,14 @@
 
 @code {
     private IEnumerable<Source>? _sources;
+
+    private string? _filter;
+
+    private IEnumerable<Source>? SortedSources =>
+        string.IsNullOrWhiteSpace(_filter) ? _sources 
+        : _sources?.Where(s => s.Id.ToString() == _filter 
+            || (s.Name?.Contains(_filter) ?? false) 
+            || (s.Details?.Contains(_filter) ?? false));
 
     protected override async Task OnInitializedAsync() => await Load();
 
