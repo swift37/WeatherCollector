@@ -1,0 +1,54 @@
+﻿@using WeatherCollector.Interfaces.Repositories;
+@using WeatherCollector.Domain;
+@inject IRepository<Source> _repository;
+
+@if (_isOpened)
+{
+    <div class="modal-container">
+        <div class="modal">
+            <div class="content">
+                <header>
+                    <h2>Create a new source</h2>
+                    <i class='bx bx-x' @onclick="Close"></i>
+                </header>
+                <EditForm Model="_newSourceModel" OnValidSubmit="Create">
+                    <div class="field">
+                        <label>Name</label>
+                        <InputText id="new-datasource-name" @bind-Value="_newSourceModel.Name" />
+                    </div>
+                    <div class="field">
+                        <label>Details</label>
+                        <InputTextArea id="new-datasource-description" @bind-Value="_newSourceModel.Details" />
+                    </div>
+                    <button type="submit">Create</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    private Source _newSourceModel = new();
+
+    [Parameter]
+    public EventCallback<Source> SourceCreated { get; set; }
+
+    private bool _isOpened;
+
+    public void Open() => _isOpened = true;
+
+    public void Close() => _isOpened = false;
+
+    private async Task Create()
+    {
+        var createdSource = await _repository.Create(_newSourceModel);
+        if (createdSource is null) return;
+
+        await OnSourceCreated(createdSource);
+        Close();
+        _newSourceModel = new();
+    }
+
+    private Task OnSourceCreated(Source source) => SourceCreated.InvokeAsync(source);
+}

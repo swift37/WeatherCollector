@@ -182,7 +182,7 @@ namespace WeatherCollector.API.Controllers.Base
         {
             var createdEntity = await _repository.Create(GetBaseEntity(entity));
 
-            return CreatedAtAction(nameof(Get), new { id = createdEntity?.Id }, entity);
+            return CreatedAtAction(nameof(Get), new { id = createdEntity?.Id }, createdEntity);
         }
 
         /// <summary>

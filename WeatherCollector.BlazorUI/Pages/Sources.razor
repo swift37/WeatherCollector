@@ -1,7 +1,10 @@
 ﻿@page "/sources"
+@using WeatherCollector.BlazorUI.Shared.Source
 @using WeatherCollector.Interfaces.Repositories;
 @using WeatherCollector.Domain;
 @inject IRepository<Source> _repository;
+
+<CreateSourceModal SourceCreated="(source) => Add(source)" @ref="_createSourceModal" />
 
 <div class="head-container">
     <div class="search-bar">
@@ -9,7 +12,7 @@
         <input type="text" @bind="_filter" @bind:event="oninput" placeholder="Search..." />
     </div>
 
-    <button class="create-btn">
+    <button class="create-btn" @onclick="() => _createSourceModal.Open()">
         Create a new source
     </button>
 </div>
@@ -52,36 +55,12 @@
     }
 </div>
 
-<!--Create source modal-->
-<div class="modal-container">
-    <div class="modal">
-        <div class="content">
-            <header>
-                <h2>Create a new source</h2>
-                <i class='bx bx-x'></i>
-            </header>
-            <EditForm Model="_newSourceModel" OnValidSubmit="Create">
-                <div class="field">
-                    <label>Name</label>
-                    <InputText id="new-datasource-name" @bind-Value="_newSourceModel.Name" />
-                </div>
-                <div class="field">
-                    <label>Details</label>
-                    <InputTextArea id="new-datasource-description" @bind-Value="_newSourceModel.Details" />
-                </div>
-                <button type="submit">Create</button>
-            </EditForm>
-        </div>
-    </div>
-</div>
-
-
 @code {
     private IList<Source>? _sources;
 
-    private Source _newSourceModel = new();
-
     private string? _filter;
+
+    private CreateSourceModal? _createSourceModal;
 
     private IEnumerable<Source>? SortedSources =>
         string.IsNullOrWhiteSpace(_filter) ? _sources 
@@ -93,14 +72,7 @@
 
     private async Task Load() => _sources = (await _repository.GetAll()).ToList();
 
-    private async Task Create()
-    {
-        var createdSource = await _repository.Create(_newSourceModel);
-        if (createdSource is null) return;
-
-        _sources?.Add(createdSource);
-        _newSourceModel = new();
-    }
+    private void Add(Source source) => _sources?.Add(source);
 
     private async Task Delete(Source? source)
     {
