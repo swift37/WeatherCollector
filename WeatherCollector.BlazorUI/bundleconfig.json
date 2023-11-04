@@ -19,6 +19,12 @@
   },
   {
     "inputFiles": [
+      "Scripts/modal.js"
+    ],
+    "outputFileName": "wwwroot/scripts/modal.js"
+  },
+  {
+    "inputFiles": [
       "appsettings.json"
     ],
     "outputFileName": "wwwroot/appsettings.json"
