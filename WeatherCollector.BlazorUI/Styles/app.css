@@ -242,6 +242,7 @@ table {
 }
 
 .validation-message {
+    font-size: 13px;
     color: #cc0000;
 }
 

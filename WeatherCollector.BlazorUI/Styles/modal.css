@@ -88,8 +88,41 @@
             resize: none;
         }
 
+    .modal .optional-fields {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        height: 314px;
+        transition: all 0.4s ease;
+        overflow: hidden;
+    }
+
+        .modal .optional-fields .control {
+            display: flex;
+            align-items: center;
+            gap: 0.3em;
+            font-size: 16px;
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+            .modal .optional-fields .control i {
+                font-size: 20px;
+                transform: rotate(180deg);
+                transition: all 0.4s ease;
+            }
+
+        .modal .optional-fields.minimized {
+            height: 23px;
+        }
+
+            .modal .optional-fields.minimized .control i {
+                transform: rotate(0deg);
+            }
+
     .modal button {
         padding: 10px 0;
+        margin-top: 15px;
         background-color: var(--primary-color);
         color: #fff;
         border-radius: 6px;
