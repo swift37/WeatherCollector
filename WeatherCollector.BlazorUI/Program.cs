@@ -11,6 +11,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAPI<IRepository<City>, WebRepository<City>>("api/citiesrepository/");
 builder.Services.AddAPI<IRepository<Source>, WebRepository<Source>>("api/sourcesrepository/");
 builder.Services.AddAPI<IRepository<Property>, WebRepository<Property>>("api/propertiesrepository/");
