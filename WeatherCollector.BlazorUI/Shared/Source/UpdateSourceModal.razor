@@ -8,17 +8,17 @@
         <div class="modal">
             <div class="content">
                 <header>
-                    <h2>Create a new source</h2>
+                    <h2>Updathe the source</h2>
                     <i class='bx bx-x' @onclick="Close"></i>
                 </header>
-                <EditForm Model="Source" OnValidSubmit="Create">
+                <EditForm Model="Source" OnValidSubmit="HandleSubmit">
                     <div class="field">
                         <label>Name</label>
-                        <InputText id="new-datasource-name" @bind-Value="Source.Name" />
+                        <InputText @bind-Value="Source.Name" />
                     </div>
                     <div class="field">
                         <label>Details</label>
-                        <InputTextArea id="new-datasource-description" @bind-Value="Source.Details" />
+                        <InputTextArea @bind-Value="Source.Details" />
                     </div>
                     <button type="submit">Update</button>
                 </EditForm>
@@ -46,7 +46,7 @@
         Source = new();
     }
 
-    private async Task Create()
+    private async Task HandleSubmit()
     {
         var updatedSource = await _repository.Update(Source);
         if (updatedSource is null) return;

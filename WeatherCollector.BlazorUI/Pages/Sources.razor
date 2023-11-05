@@ -70,7 +70,7 @@
 
     private IEnumerable<Source>? SortedSources =>
         string.IsNullOrWhiteSpace(_filter) ? _sources 
-        : _sources?.Where(s => s.Id.ToString() == _filter 
+        : _sources?.Where(s => s.Id.ToString().Contains(_filter) 
             || (s.Name?.Contains(_filter) ?? false) 
             || (s.Details?.Contains(_filter) ?? false));
 
