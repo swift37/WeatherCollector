@@ -1,0 +1,91 @@
+﻿@using AutoMapper;
+@using MetaWeather;
+@using WeatherCollector.BlazorUI.Models.City;
+@using WeatherCollector.BlazorUI.Services.Interfaces;
+@using WeatherCollector.Interfaces.Repositories;
+@using WeatherCollector.Domain;
+@inject IMapper _mapper;
+@inject ICitiesService _citiesService;
+
+@if (_isOpened)
+{
+    <div class="modal-container">
+        <div class="modal">
+            <div class="content">
+                <header>
+                    <h2>Update the city</h2>
+                    <i class='bx bx-x' @onclick="Close"></i>
+                </header>
+                <EditForm Model="_updateCityModel" OnValidSubmit="HandleSubmit">
+                    <DataAnnotationsValidator/>
+                    <div class="field">
+                        <label>Name</label>
+                        <InputText @bind-Value="_updateCityModel.Name" />
+                        <ValidationMessage For="() => _updateCityModel.Name" />
+                    </div>
+                    <div class="field">
+                        <label>Country</label>
+                        <InputText @bind-Value="_updateCityModel.Country" />
+                    </div>
+                    <div class="field">
+                        <label>Latitude</label>
+                        <InputNumber @bind-Value="_updateCityModel.Latitude" />
+                        <ValidationMessage For="() => _updateCityModel.Latitude" />
+                    </div>
+                    <div class="field">
+                        <label>Longitude</label>
+                        <InputNumber @bind-Value="_updateCityModel.Longitude" />
+                        <ValidationMessage For="() => _updateCityModel.Longitude" />
+                    </div>
+                    @if (_faultMessage != null)
+                    {
+                        <p class="validation-message">@_faultMessage</p>
+                    }
+                    <button type="submit">Update</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public City City { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<City> CityUpdated { get; set; }
+
+    private CityUpdateDTO _updateCityModel = new();
+
+    private string? _faultMessage;
+
+    private bool _isOpened;
+
+    protected override void OnParametersSet() => _updateCityModel = _mapper.Map<CityUpdateDTO>(City);
+
+    public void Open() => _isOpened = true;
+
+    public void Close()
+    {
+        _isOpened = false;
+        _faultMessage = null;
+        _updateCityModel = new();
+    }
+
+    private async Task HandleSubmit()
+    {
+        var response = await _citiesService.Update(_updateCityModel);
+
+        if (!response.Success)
+        {
+            _faultMessage = response.FaultMessage;
+            return;
+        }
+
+        await OnCityUpdated(response.Data);
+        Close();
+    }
+
+    private Task OnCityUpdated(City city) => CityUpdated.InvokeAsync(city);
+}
