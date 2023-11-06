@@ -2,7 +2,7 @@
 
 namespace WeatherCollector.DAL.Entities
 {
-    public class DataValue : Entity
+    public class DataValue : NamedEntity
     {
         public DateTimeOffset Time { get; set; } = DateTimeOffset.Now;
 
