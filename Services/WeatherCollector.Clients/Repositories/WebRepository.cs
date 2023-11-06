@@ -36,8 +36,15 @@ namespace WeatherCollector.Clients.Repositories
         }
             
 
-        public async Task<T?> Get(int id, CancellationToken cancellation = default) => 
-            await _client.GetFromJsonAsync<T?>($"{id}", cancellation).ConfigureAwait(false);
+        public async Task<T?> Get(int id, CancellationToken cancellation = default)
+        {
+            var response = await _client.GetAsync($"{id}", cancellation).ConfigureAwait(false);
+
+            if (response.StatusCode == HttpStatusCode.NotFound) return default;
+
+            var result = await response.EnsureSuccessStatusCode().Content.ReadFromJsonAsync<T>(cancellationToken: cancellation);
+            return result;
+        }
 
         public async Task<IEnumerable<T>> Get(int skip, int count, CancellationToken cancellation = default)
         {

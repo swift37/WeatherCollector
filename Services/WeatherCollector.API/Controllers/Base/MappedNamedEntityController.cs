@@ -39,17 +39,17 @@ namespace WeatherCollector.API.Controllers.Base
         /// GET /entities/name
         /// </remarks>
         /// <param name="name">Entity name</param>
-        /// <returns>Returns IEnumerable<T></returns>
+        /// <returns>Returns T or entity name</returns>
         /// <response code="200">Success</response>
         /// <response code="404">Not Found</response>
         [HttpGet("{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<T>> Get(string? name)
+        public async Task<IActionResult> Get(string? name)
         {
             var entity = GetEntity(await _repository.Get(name));
 
-            return entity is null ? NotFound() : Ok(entity);
+            return entity is null ? NotFound(name) : Ok(entity);
         }
 
         /// <summary>

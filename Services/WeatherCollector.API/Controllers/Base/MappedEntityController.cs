@@ -104,7 +104,7 @@ namespace WeatherCollector.API.Controllers.Base
         /// GET /entities/1
         /// </remarks>
         /// <param name="id">Entity id</param>
-        /// <returns>Returns IEnumerable<T></returns>
+        /// <returns>Returns T</returns>
         /// <response code="200">Success</response>
         /// <response code="404">Not Found</response>
         [HttpGet("{id:int}")]
