@@ -41,7 +41,7 @@ namespace WeatherCollector.API.Controllers.Base
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<bool>> ExistId(int id) =>
-            await _repository.ExistById(id) ? Ok(true) : NotFound(false);
+            await _repository.Exist(id) ? Ok(true) : NotFound(false);
 
         /// <summary>
         /// Get true if entity exists
@@ -230,7 +230,7 @@ namespace WeatherCollector.API.Controllers.Base
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteById(int id)
         {
-            if (await _repository.DeleteById(id) is not { } deletedEntity)
+            if (await _repository.Delete(id) is not { } deletedEntity)
                 return NotFound(id);
 
             return Ok(deletedEntity);

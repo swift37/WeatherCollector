@@ -14,7 +14,7 @@ namespace WeatherCollector.API.Controllers.Base
         where TBase : IEntity
     {
         private readonly IRepository<TBase> _repository;
-        private readonly IMapper _mapper;
+        protected readonly IMapper _mapper;
 
         public MappedEntityController(IRepository<TBase> repository, IMapper mapper)
         {
@@ -57,8 +57,8 @@ namespace WeatherCollector.API.Controllers.Base
         [HttpGet("exist/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<bool>> ExistId(int id) =>
-            await _repository.ExistById(id) ? Ok(true) : NotFound(false);
+        public async Task<ActionResult<bool>> Exist(int id) =>
+            await _repository.Exist(id) ? Ok(true) : NotFound(false);
 
         /// <summary>
         /// Get true if entity exists
@@ -97,7 +97,7 @@ namespace WeatherCollector.API.Controllers.Base
             Ok(GetEntities(await _repository.GetAll()));
 
         /// <summary>
-        /// Get a enumeration of entities with the specified number of elements, skipping the specified number of elements.
+        /// Get the entity by id.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -163,7 +163,7 @@ namespace WeatherCollector.API.Controllers.Base
             };
 
         /// <summary>
-        /// Create an entity
+        /// Create an entity.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -186,7 +186,7 @@ namespace WeatherCollector.API.Controllers.Base
         }
 
         /// <summary>
-        /// Update an entity
+        /// Update the entity.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -213,7 +213,7 @@ namespace WeatherCollector.API.Controllers.Base
         }
 
         /// <summary>
-        /// Delete an entity
+        /// Delete the entity.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -240,7 +240,7 @@ namespace WeatherCollector.API.Controllers.Base
         }
 
         /// <summary>
-        /// Delete an entity
+        /// Delete the entity by id.
         /// </summary>
         /// <remarks>
         /// Sample request:
@@ -253,9 +253,9 @@ namespace WeatherCollector.API.Controllers.Base
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteById(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            if (GetEntity(await _repository.DeleteById(id)) is not { } deletedEntity)
+            if (GetEntity(await _repository.Delete(id)) is not { } deletedEntity)
                 return NotFound(id);
 
             return Ok(deletedEntity);

@@ -14,21 +14,21 @@ namespace WeatherCollector.DAL.Repositories
     {
         public DbNamedRepository(AppDbContext context) : base(context) { }
 
-        public async Task<bool> ExistName(string? name, CancellationToken cancellation = default)
+        public async Task<bool> Exist(string? name, CancellationToken cancellation = default)
         {
             if (name is null) throw new ArgumentNullException(nameof(name));
 
             return await Entities.AnyAsync(e => e.Name == name).ConfigureAwait(false);
         }
 
-        public async Task<T?> GetByName(string? name, CancellationToken cancellation = default)
+        public async Task<T?> Get(string? name, CancellationToken cancellation = default)
         {
             if (name is null) throw new ArgumentNullException(nameof(name));
             
             return await Entities.FirstOrDefaultAsync(e => e.Name == name, cancellation).ConfigureAwait(false);
         }
 
-        public async Task<T?> DeleteByName(string? name, CancellationToken cancellation = default)
+        public async Task<T?> Delete(string? name, CancellationToken cancellation = default)
         {
             if (name is null) throw new ArgumentNullException(nameof(name));
 

@@ -13,7 +13,7 @@ namespace WeatherCollector.Clients.Repositories
 
         public WebRepository(HttpClient client) => _client = client;
 
-        public async Task<bool> ExistById(int id, CancellationToken cancellation = default)
+        public async Task<bool> Exist(int id, CancellationToken cancellation = default)
         {
             var response = await _client.GetAsync($"exist/{id}", cancellation).ConfigureAwait(false);
             return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
@@ -95,7 +95,7 @@ namespace WeatherCollector.Clients.Repositories
             return result;
         }
 
-        public async Task<T?> DeleteById(int id, CancellationToken cancellation = default)
+        public async Task<T?> Delete(int id, CancellationToken cancellation = default)
         {
             var response = await _client.DeleteAsync($"{id}", cancellation).ConfigureAwait(false);
 
