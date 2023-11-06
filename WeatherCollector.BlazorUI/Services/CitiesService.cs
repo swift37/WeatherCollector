@@ -70,13 +70,5 @@ namespace WeatherCollector.BlazorUI.Services
                 new Response<City>() { Success = false, FaultMessage = "An error occurred during deleting an object." } :
                 new Response<City>() { Data = deletedCity };
         }
-
-        //public async Task<Response<City>> Delete(int id)
-        //{
-        //    var deletedCity = await _cityRepository.DeleteById(id);
-        //    return deletedCity is null ?
-        //        new Response<City>() { Success = false, FaultMessage = "An error occurred during deleting an object." } :
-        //        new Response<City>() { Data = deletedCity };
-        //}
     }
 }

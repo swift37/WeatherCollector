@@ -1,7 +1,55 @@
 ﻿@page "/curweather"
+@using WeatherCollector.Domain;
 
-<h3>CurrentWeather</h3>
+<div class="page-head">
+    <h2>Current weather in selected city</h2>
+    <span>Enter your city name and select a data source</span>
+</div>
+
+<div class="search-box">
+    <div class="search-bar">
+        <i class='bx bx-analyse'></i>
+        <input type="text" @bind="_cityName" @bind:event="oninput" placeholder="Enter the city name" />
+    </div>
+
+    <button class="search-btn">
+        Get
+    </button>
+</div>
+
+<div class="container centered">
+    @if (_properties is { } properties)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>@nameof(Property.Id)</th>
+                    <th>@nameof(Property.Time)</th>
+                    <th>@nameof(Property.City)</th>
+                    <th>@nameof(Property.Name)</th>
+                    <th>@nameof(Property.Value)</th>
+                    <th>@nameof(Property.Source)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var property in properties)
+                {
+                    <tr>
+                        <td>@property.Id</td>
+                        <td>@property.Time</td>
+                        <td>@property.City</td>
+                        <td>@property.Name</td>
+                        <td>@property.Value</td>
+                        <td>@property.Source</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 
 @code {
+    private IList<Property>? _properties;
 
+    private string? _cityName;
 }

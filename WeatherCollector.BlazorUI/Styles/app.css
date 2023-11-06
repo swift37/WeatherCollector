@@ -151,6 +151,24 @@ table {
     align-items: center;
 }
 
+.page-head {
+    margin-bottom: 1.5em;
+}
+
+    .page-head h2 {
+        font-size: 32px;
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    .page-head span {
+        font-size: 17px;
+        font-weight: 400;
+        color: var(--text-color);
+        opacity: 0.8;
+        margin: 0.4em 0 0 0.2em;
+    }
+
 @media only screen and (max-width: 767px) {
     .head-container {
         justify-content: flex-end;
@@ -172,6 +190,12 @@ table {
 .sidebar.minimized ~ .screen {
     left: 88px;
     width: calc(100% - 88px);
+}
+
+@media only screen and (max-width: 767px) {
+    .screen {
+        padding: 25px;
+    }
 }
 
 .search-bar {
@@ -209,13 +233,30 @@ table {
     transition: all 0.2s ease;
 }
 
+.search-box {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.search-box .search-bar {
+    flex: 1;
+    width: auto;
+}
+
 @media only screen and (max-width: 767px) {
+    .search-box {
+        justify-content: flex-end;
+    }
+
     .search-bar {
+        flex: none;
         width: 100%;
     }
 }
 
-.create-btn {
+.create-btn, .search-btn {
     align-self: flex-end;
     width: max-content;
     border: none;
@@ -229,9 +270,14 @@ table {
     transition: all 0.4s ease;
 }
 
-    .create-btn:hover {
+    .create-btn:hover, .search-btn:hover {
         background-color: var(--primary-hover-color);
     }
+
+.search-btn {
+    padding: 13px 50px;
+    height: 50px;
+}
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
