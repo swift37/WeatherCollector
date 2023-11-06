@@ -9,7 +9,7 @@ namespace WeatherCollector.Clients.Repositories
 {
     public class WebRepository<T> : IRepository<T> where T : IEntity
     {
-        private readonly HttpClient _client;
+        protected readonly HttpClient _client;
 
         public WebRepository(HttpClient client) => _client = client;
 
