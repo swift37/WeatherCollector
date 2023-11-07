@@ -180,7 +180,8 @@ namespace WeatherCollector.API.Controllers.Base
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<T>> Create([FromBody] T entity)
         {
-            var createdEntity = await _repository.Create(GetBaseEntity(entity));
+            var baseEntity = GetBaseEntity(entity);
+            var createdEntity = GetEntity(await _repository.Create(baseEntity));
 
             return CreatedAtAction(nameof(Get), new { id = createdEntity?.Id }, createdEntity);
         }
@@ -206,7 +207,8 @@ namespace WeatherCollector.API.Controllers.Base
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<T>> Update([FromBody] T entity)
         {
-            if (await _repository.Update(GetBaseEntity(entity)) is not { } updatedEntity)
+            var baseEntity = GetBaseEntity(entity);
+            if (GetEntity(await _repository.Update(baseEntity)) is not { } updatedEntity)
                 return NotFound();
 
             return AcceptedAtAction(nameof(Get), new { id = updatedEntity.Id }, updatedEntity);
@@ -233,7 +235,8 @@ namespace WeatherCollector.API.Controllers.Base
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<T>> Delete([FromBody] T entity)
         {
-            if (await _repository.Delete(GetBaseEntity(entity)) is not { } deletedEntity)
+            var baseEntity = GetBaseEntity(entity);
+            if (GetEntity(await _repository.Delete(baseEntity)) is not { } deletedEntity)
                 return NotFound(entity);
 
             return Ok(deletedEntity);
