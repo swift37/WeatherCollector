@@ -1,5 +1,8 @@
 ﻿@page "/curweather"
+@using WeatherCollector.BlazorUI.Services.Interfaces;
 @using WeatherCollector.Domain;
+@using WeatherCollector.Interfaces.Repositories;
+@inject IWeatherService _weatherService;
 
 <div class="page-head">
     <h2>Current weather in selected city</h2>
@@ -12,10 +15,14 @@
         <input type="text" @bind="_cityName" @bind:event="oninput" placeholder="Enter the city name" />
     </div>
 
-    <button class="search-btn">
+    <button @onclick="GetWeather" class="search-btn">
         Get
     </button>
 </div>
+@if (_faultMessage != null)
+{
+    <p class="validation-message">@_faultMessage</p>
+}
 
 <div class="container centered">
     @if (_properties is { } properties)
@@ -37,10 +44,10 @@
                     <tr>
                         <td>@property.Id</td>
                         <td>@property.Time</td>
-                        <td>@property.City</td>
+                        <td>@property.City?.Name</td>
                         <td>@property.Name</td>
                         <td>@property.Value</td>
-                        <td>@property.Source</td>
+                        <td>@property.Source?.Name</td>
                     </tr>
                 }
             </tbody>
@@ -52,4 +59,26 @@
     private IList<Property>? _properties;
 
     private string? _cityName;
+
+    private string? _faultMessage;
+
+    private async Task GetWeather()
+    {
+        Reset();
+
+        var result = await _weatherService.GetCurrentWeather(_cityName);
+        if (!result.Success)
+        {
+            _faultMessage = result.FaultMessage;
+            return;
+        }
+
+        _properties = result.Data.ToList();
+    }
+
+    private void Reset()
+    {
+        _properties = null;
+        _faultMessage = null;
+    }
 }

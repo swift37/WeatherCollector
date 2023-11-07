@@ -20,7 +20,7 @@ class Program
 
     private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) 
     {
-        services.AddHttpClient<IRepository<City>, WebRepository<City>>(client =>
+        services.AddHttpClient<INamedRepository<City>, WebNamedRepository<City>>(client =>
         {
             client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/citiesrepository/");
         });
@@ -50,7 +50,7 @@ class Program
     {
         using var host = Hosting;
         await host.StartAsync();
-
+        
         Console.WriteLine("Completed!");
         Console.ReadLine();
 
