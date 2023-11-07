@@ -8,7 +8,10 @@ namespace WeatherCollector.DAL.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<DataValue> builder)
         {
-            builder.HasIndex(s => s.Time);
+            builder.HasIndex(v => v.Time);
+
+            builder.Navigation(v => v.Object).AutoInclude();
+            builder.Navigation(v => v.Source).AutoInclude();
         }
     }
 }
