@@ -10,6 +10,8 @@ namespace WeatherCollector.BlazorUI.Services.Interfaces
 
         Task<Response<City>> Get(int id);
 
+        Task<Response<City>> GetOrCreate(string? name);
+
         Task<Response<City>> Create(CityCreateDTO cityCreateDTO);
 
         Task<Response<City>> Update(CityUpdateDTO cityUpdateDTO);
