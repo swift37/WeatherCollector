@@ -151,6 +151,24 @@ table {
     align-items: center;
 }
 
+.text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+
+    .text-container h2 {
+        font-size: 36px;
+        font-weight: 600;
+    }
+
+    .text-container :where(span, p) {
+        font-size: 22px;
+        font-weight: 400;
+    }
+
 .page-head {
     margin-bottom: 1.5em;
 }
