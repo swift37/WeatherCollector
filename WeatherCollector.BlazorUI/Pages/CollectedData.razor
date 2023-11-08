@@ -2,6 +2,7 @@
 @using WeatherCollector.BlazorUI.Services.Interfaces;
 @using WeatherCollector.Domain;
 @using WeatherCollector.Interfaces.Repositories;
+@inject IPropertiesService _propertiesService;
 @inject IWeatherService _weatherService;
 
 <div class="page-head">
@@ -43,6 +44,7 @@
                     <th>@nameof(Property.Name)</th>
                     <th>@nameof(Property.Value)</th>
                     <th>@nameof(Property.Source)</th>
+                    <th class="actions">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +57,11 @@
                         <td>@property.Name</td>
                         <td>@property.Value</td>
                         <td>@property.Source?.Name</td>
+                        <td class="actions">
+                            <button class="remove-btn" @onclick="() => Delete(property)">
+                                <i class='bx bx-trash-alt'></i>
+                            </button>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -63,7 +70,7 @@
 </div>
 
 @code {
-    private IEnumerable<Property>? _properties;
+    private ICollection<Property>? _properties;
 
     private string? _cityName;
 
@@ -71,14 +78,14 @@
 
     private string? _filter;
 
-    private IEnumerable<Property>? FilteredProperties =>
+    private ICollection<Property>? FilteredProperties =>
         string.IsNullOrWhiteSpace(_filter) ? _properties
         : _properties?.Where(p => p.Id.ToString().Contains(_filter)
             || (p.Name?.Contains(_filter) ?? false)
             || (p.Value?.Contains(_filter) ?? false)
             || (p.City?.Name?.Contains(_filter) ?? false)
             || (p.Source?.Name?.Contains(_filter) ?? false)
-            || (p.Time.ToString().Contains(_filter)));
+            || (p.Time.ToString().Contains(_filter))).ToList();
 
     private async Task GetData()
     {
@@ -91,12 +98,21 @@
             return;
         }
 
-        _properties = result.Data;
+        _properties = result.Data.ToList();
     }
 
     private void Reset()
     {
         _properties = null;
         _faultMessage = null;
+    }
+
+    private async Task Delete(Property property)
+    {
+        if (_properties is not { }) return;
+
+        var result = await _propertiesService.Delete(property);
+        if (result.Success)
+            _properties.Remove(result.Data);
     }
 }
