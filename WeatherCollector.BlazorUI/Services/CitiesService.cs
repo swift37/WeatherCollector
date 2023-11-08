@@ -32,6 +32,15 @@ namespace WeatherCollector.BlazorUI.Services
                 new Response<City>() { Data = city };
         }
 
+        public async Task<Response<City>> Get(string? name)
+        {
+            var city = await _citiesRepository.Get(name);
+
+            return city is null ?
+                new Response<City>() { Success = false, FaultMessage = "The city is not found." } :
+                new Response<City>() { Data = city };
+        }
+
         public async Task<Response<City>> GetOrCreate(string? name)
         {
             var city = await _citiesRepository.Get(name);
