@@ -1,20 +1,19 @@
 ﻿using MetaWeather;
-using System.ComponentModel;
 using WeatherCollector.BlazorUI.Services.Base;
 using WeatherCollector.BlazorUI.Services.Interfaces;
+using WeatherCollector.Clients.Repositories;
 using WeatherCollector.Domain;
-using WeatherCollector.Interfaces.Repositories;
 
 namespace WeatherCollector.BlazorUI.Services
 {
     public class WeatherService : IWeatherService
     {
-        private readonly IRepository<Property> _propertiesRepository;
+        private readonly PropertiesWebRepository _propertiesRepository;
         private readonly ICitiesService _citiesService;
         private readonly AstroWeatherClient _client;
 
         public WeatherService(
-            IRepository<Property> propertiesRepository,
+            PropertiesWebRepository propertiesRepository,
             ICitiesService citiesService,
             AstroWeatherClient client) => 
             (_propertiesRepository, _citiesService, _client) = 
@@ -95,6 +94,23 @@ namespace WeatherCollector.BlazorUI.Services
                         }
                 }
             }
+        }
+
+        public async Task<Response<IEnumerable<Property>>> GetCollectedData(string? cityName)
+        {
+            var response = await _citiesService.Get(cityName);
+
+            if (!response.Success) return
+                    new Response<IEnumerable<Property>> { Success = false, FaultMessage = response.FaultMessage };
+
+            var city = response.Data;
+
+            var properties = await _propertiesRepository.GetAllMatches(city.Name);
+
+            if (properties is not { }) return
+                    new Response<IEnumerable<Property>> { Success = false, FaultMessage = "There is no collected data about this city." };
+
+            return new Response<IEnumerable<Property>> { Data = properties };
         }
     }
 }
