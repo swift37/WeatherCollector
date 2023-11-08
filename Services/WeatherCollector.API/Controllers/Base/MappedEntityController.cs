@@ -13,7 +13,7 @@ namespace WeatherCollector.API.Controllers.Base
         where T : IEntity
         where TBase : IEntity
     {
-        private readonly IRepository<TBase> _repository;
+        protected readonly IRepository<TBase> _repository;
         protected readonly IMapper _mapper;
 
         public MappedEntityController(IRepository<TBase> repository, IMapper mapper)

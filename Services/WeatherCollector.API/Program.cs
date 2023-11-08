@@ -14,6 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("DbConnection")
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString, opt => opt.MigrationsAssembly("WeatherCollector.DAL.SQLServer")));
 
+builder.Services.AddScoped(typeof(DataValuesRepository));
 builder.Services.AddScoped(typeof(IRepository<>), typeof(DbRepository<>));
 builder.Services.AddScoped(typeof(INamedRepository<>), typeof(DbNamedRepository<>));
 
