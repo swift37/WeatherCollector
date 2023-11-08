@@ -43,7 +43,7 @@ namespace WeatherCollector.DAL.Repositories
             return entity;
         }
 
-        public async Task<T?> DeleteById(int id, CancellationToken cancellation = default)
+        public async Task<T?> Delete(int id, CancellationToken cancellation = default)
         {
             var entity = DbSet.Local.FirstOrDefault(e => e.Id == id);
 
@@ -63,7 +63,7 @@ namespace WeatherCollector.DAL.Repositories
             return await Entities.AnyAsync(e => e.Id == entity.Id, cancellation).ConfigureAwait(false);
         }
 
-        public async Task<bool> ExistById(int id, CancellationToken cancellation = default)
+        public async Task<bool> Exist(int id, CancellationToken cancellation = default)
         {
             return await Entities.AnyAsync(e => e.Id == id, cancellation).ConfigureAwait(false);
         }

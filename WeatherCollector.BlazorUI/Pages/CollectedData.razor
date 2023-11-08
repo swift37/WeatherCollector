@@ -1,0 +1,118 @@
+﻿@page "/collected"
+@using WeatherCollector.BlazorUI.Services.Interfaces;
+@using WeatherCollector.Domain;
+@using WeatherCollector.Interfaces.Repositories;
+@inject IPropertiesService _propertiesService;
+@inject IWeatherService _weatherService;
+
+<div class="page-head">
+    <h2>Collected weather data for selected city</h2>
+    <span>Enter your city name and select a data source</span>
+</div>
+
+<div class="search-box">
+    <div class="search-bar">
+        <i class='bx bx-analyse'></i>
+        <input type="text" @bind="_cityName" @bind:event="oninput" placeholder="Enter the city name" />
+    </div>
+
+    <button @onclick="GetData" class="search-btn">
+        Get data
+    </button>
+</div>
+@if (_faultMessage != null)
+{
+    <p class="validation-message">@_faultMessage</p>
+}
+@if (_properties != null)
+{
+    <div class="search-bar">
+        <i class="bx bx-search"></i>
+        <input type="text" @bind="_filter" @bind:event="oninput" placeholder="Search..." />
+    </div>
+}
+
+<div class="container centered">
+    @if (FilteredProperties is { } properties)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>@nameof(Property.Id)</th>
+                    <th>@nameof(Property.Time)</th>
+                    <th>@nameof(Property.City)</th>
+                    <th>@nameof(Property.Name)</th>
+                    <th>@nameof(Property.Value)</th>
+                    <th>@nameof(Property.Source)</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var property in properties)
+                {
+                    <tr>
+                        <td>@property.Id</td>
+                        <td>@property.Time</td>
+                        <td>@property.City?.Name</td>
+                        <td>@property.Name</td>
+                        <td>@property.Value</td>
+                        <td>@property.Source?.Name</td>
+                        <td class="actions">
+                            <button class="remove-btn" @onclick="() => Delete(property)">
+                                <i class='bx bx-trash-alt'></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    private ICollection<Property>? _properties;
+
+    private string? _cityName;
+
+    private string? _faultMessage;
+
+    private string? _filter;
+
+    private ICollection<Property>? FilteredProperties =>
+        string.IsNullOrWhiteSpace(_filter) ? _properties
+        : _properties?.Where(p => p.Id.ToString().Contains(_filter)
+            || (p.Name?.Contains(_filter) ?? false)
+            || (p.Value?.Contains(_filter) ?? false)
+            || (p.City?.Name?.Contains(_filter) ?? false)
+            || (p.Source?.Name?.Contains(_filter) ?? false)
+            || (p.Time.ToString().Contains(_filter))).ToList();
+
+    private async Task GetData()
+    {
+        Reset();
+
+        var result = await _weatherService.GetCollectedData(_cityName);
+        if (!result.Success)
+        {
+            _faultMessage = result.FaultMessage;
+            return;
+        }
+
+        _properties = result.Data.ToList();
+    }
+
+    private void Reset()
+    {
+        _properties = null;
+        _faultMessage = null;
+    }
+
+    private async Task Delete(Property property)
+    {
+        if (_properties is not { }) return;
+
+        var result = await _propertiesService.Delete(property);
+        if (result.Success)
+            _properties.Remove(result.Data);
+    }
+}

@@ -3,8 +3,8 @@ using Microsoft.Extensions.Hosting;
 using Polly.Extensions.Http;
 using Polly;
 using WeatherCollector.Interfaces.Repositories;
-using WeatherCollector.DAL.Entities;
 using WeatherCollector.Clients.Repositories;
+using WeatherCollector.Domain;
 
 class Program
 {
@@ -20,14 +20,19 @@ class Program
 
     private static void ConfigureServices(HostBuilderContext host, IServiceCollection services) 
     {
-        services.AddHttpClient<IRepository<DataSource>, WebRepository<DataSource>>(client =>
+        services.AddHttpClient<INamedRepository<City>, WebNamedRepository<City>>(client =>
         {
-            client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/DataSources/");
+            client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/citiesrepository/");
         });
 
-        services.AddHttpClient<IRepository<DataValue>, WebRepository<DataValue>>(client =>
+        services.AddHttpClient<IRepository<Source>, WebRepository<Source>>(client =>
         {
-            client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/DataValues/");
+            client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/sourcesrepository/");
+        });
+
+        services.AddHttpClient<INamedRepository<Property>, WebNamedRepository<Property>>(client =>
+        {
+            client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/propertiesrepository/");
         });
     }
 
@@ -45,7 +50,7 @@ class Program
     {
         using var host = Hosting;
         await host.StartAsync();
-
+        
         Console.WriteLine("Completed!");
         Console.ReadLine();
 

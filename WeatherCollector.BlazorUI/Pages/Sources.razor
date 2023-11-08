@@ -1,0 +1,103 @@
+﻿@page "/sources"
+@using WeatherCollector.BlazorUI.Services.Interfaces;
+@using WeatherCollector.BlazorUI.Shared.Source
+@using WeatherCollector.Interfaces.Repositories;
+@using WeatherCollector.Domain;
+@inject ISourcesService _sourcesService;
+
+<CreateSourceModal SourceCreated="(source) => _sources?.Add(source)" @ref="_createSourceModal" />
+
+<UpdateSourceModal Source="_updatedSource" SourceUpdated="(source) => _updatedSource = source" @ref="_updateSourceModal" />
+
+<div class="head-container">
+    <div class="search-bar">
+        <i class="bx bx-search"></i>
+        <input type="text" @bind="_filter" @bind:event="oninput" placeholder="Search..." />
+    </div>
+
+    <button class="create-btn" @onclick="() => _createSourceModal.Open()">
+        Create a new source
+    </button>
+</div>
+
+<div class="container centered">
+    @if (FilteredSources is { } sources)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Details</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var source in sources)
+                {
+                    <tr>
+                        <td>@source.Id</td>
+                        <td>@source.Name</td>
+                        <td>@source.Details</td>
+                        <td class="actions">
+                            <button class="edit-btn" @onclick="() => Update(source)">
+                                <i class='bx bx-edit'></i>
+                            </button>
+                            <button class="remove-btn" @onclick="() => Delete(source)">
+                                <i class='bx bx-trash-alt'></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
+</div>
+
+@code {
+    private IList<Source>? _sources;
+
+    private string? _filter;
+
+    private CreateSourceModal? _createSourceModal;
+
+    private UpdateSourceModal? _updateSourceModal;
+
+    private Source? _updatedSource;
+
+    private IEnumerable<Source>? FilteredSources =>
+        string.IsNullOrWhiteSpace(_filter) ? _sources 
+        : _sources?.Where(s => s.Id.ToString().Contains(_filter) 
+            || (s.Name?.Contains(_filter) ?? false) 
+            || (s.Details?.Contains(_filter) ?? false));
+
+    protected override async Task OnInitializedAsync() => await Load();
+
+    private async Task Load()
+    {
+        var result = await _sourcesService.GetAll();
+        if (result.Success)
+            _sources = result.Data.ToList();
+    }
+
+    private void Update(Source source)
+    {
+        _updatedSource = source;
+        _updateSourceModal?.Open();
+    }
+
+    private async Task Delete(Source source)
+    {
+        if (_sources is not { Count: > 0 }) return;
+
+        var result = await _sourcesService.Delete(source);
+
+        if (result.Success)
+            _sources.Remove(result.Data);
+    }
+
+}

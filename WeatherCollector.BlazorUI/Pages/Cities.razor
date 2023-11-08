@@ -1,0 +1,109 @@
+﻿@page "/cities"
+@using WeatherCollector.BlazorUI.Services.Interfaces;
+@using WeatherCollector.BlazorUI.Shared.City
+@using WeatherCollector.Interfaces.Repositories;
+@using WeatherCollector.Domain;
+@inject ICitiesService _citiesService;
+
+<CreateCityModal CityCreated="(city) => _cities?.Add(city)" @ref="_createCityModal" />
+
+<UpdateCityModal City="_updatedCity" CityUpdated="(city) => _updatedCity = city" @ref="_updateCityModal" />
+
+<div class="head-container">
+    <div class="search-bar">
+        <i class="bx bx-search"></i>
+        <input type="text" @bind="_filter" @bind:event="oninput" placeholder="Search..." />
+    </div>
+
+    <button class="create-btn" @onclick="() => _createCityModal.Open()">
+        Add a new city
+    </button>
+</div>
+
+<div class="container centered">
+    @if (FilteredCitys is { } cities)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>@nameof(City.Id)</th>
+                    <th>@nameof(City.Name)</th>
+                    <th>@nameof(City.Country)</th>
+                    <th>@nameof(City.Latitude)</th>
+                    <th>@nameof(City.Longitude)</th>
+                    <th class="actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var city in cities)
+                {
+                    <tr>
+                        <td>@city.Id</td>
+                        <td>@city.Name</td>
+                        <td>@city.Country</td>
+                        <td>@city.Latitude</td>
+                        <td>@city.Longitude</td>
+                        <td class="actions">
+                            <button class="edit-btn" @onclick="() => Update(city)">
+                                <i class='bx bx-edit'></i>
+                            </button>
+                            <button class="remove-btn" @onclick="() => Delete(city)">
+                                <i class='bx bx-trash-alt'></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
+</div>
+
+@code {
+    private IList<City>? _cities;
+
+    private string? _filter;
+
+    private CreateCityModal? _createCityModal;
+
+    private UpdateCityModal? _updateCityModal;
+
+    private City? _updatedCity;
+
+    private IEnumerable<City>? FilteredCitys =>
+        string.IsNullOrWhiteSpace(_filter) ? _cities
+        : _cities?.Where(c => c.Id.ToString().Contains(_filter)
+            || (c.Name?.Contains(_filter) ?? false)
+            || (c.Country?.Contains(_filter) ?? false)
+            || (c.Latitude.ToString().Contains(_filter))
+            || (c.Longitude.ToString().Contains(_filter)));
+
+    protected override async Task OnInitializedAsync() => await Load();
+
+    private async Task Load()
+    {
+        var result = await _citiesService.GetAll();
+        if (result.Success)
+            _cities = result.Data.ToList();
+    }
+
+    private void Update(City city)
+    {
+        _updatedCity = city;
+        _updateCityModal?.Open();
+    }
+
+    private async Task Delete(City city)
+    {
+        if (_cities is not { Count: > 0 }) return;
+
+        var result = await _citiesService.Delete(city);
+        if (result.Success)
+            _cities.Remove(result.Data);
+    }
+
+}
+

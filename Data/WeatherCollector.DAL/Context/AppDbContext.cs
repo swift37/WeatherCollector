@@ -8,6 +8,8 @@ namespace WeatherCollector.DAL.Context
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+        public DbSet<DataObject> DataObjects { get; set; }
+
         public DbSet<DataSource> DataSources { get; set; }
 
         public DbSet<DataValue> DataValues { get; set; }
@@ -16,6 +18,7 @@ namespace WeatherCollector.DAL.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfiguration(new DataObjectConfiguration());
             modelBuilder.ApplyConfiguration(new DataSourceConfiguration());
             modelBuilder.ApplyConfiguration(new DataValueConfiguration());
         }

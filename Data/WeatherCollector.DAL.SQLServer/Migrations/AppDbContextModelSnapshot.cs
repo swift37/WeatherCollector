@@ -22,6 +22,34 @@ namespace WeatherCollector.DAL.SQLServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("WeatherCollector.DAL.Entities.DataObject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Country")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.ToTable("DataObjects");
+                });
+
             modelBuilder.Entity("WeatherCollector.DAL.Entities.DataSource", b =>
                 {
                     b.Property<int>("Id")
@@ -56,6 +84,13 @@ namespace WeatherCollector.DAL.SQLServer.Migrations
                     b.Property<bool>("IsFault")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ObjectId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SourceId")
                         .HasColumnType("int");
 
@@ -67,6 +102,8 @@ namespace WeatherCollector.DAL.SQLServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ObjectId");
+
                     b.HasIndex("SourceId");
 
                     b.HasIndex("Time");
@@ -76,10 +113,17 @@ namespace WeatherCollector.DAL.SQLServer.Migrations
 
             modelBuilder.Entity("WeatherCollector.DAL.Entities.DataValue", b =>
                 {
+                    b.HasOne("WeatherCollector.DAL.Entities.DataObject", "Object")
+                        .WithMany()
+                        .HasForeignKey("ObjectId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("WeatherCollector.DAL.Entities.DataSource", "Source")
                         .WithMany()
                         .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Object");
 
                     b.Navigation("Source");
                 });

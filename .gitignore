@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+**/wwwroot/lib
+**/wwwroot/lib-*
+/WeatherCollector.BlazorUI/wwwroot/css
+/WeatherCollector.BlazorUI/wwwroot/scripts
+/WeatherCollector.BlazorUI/wwwroot/appsettings.json

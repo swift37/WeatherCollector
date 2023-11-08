@@ -1,0 +1,35 @@
+﻿{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib-blazor/jquery/"
+    },
+    {
+      "library": "font-awesome@6.4.2",
+      "destination": "wwwroot/lib-blazor/font-awesome/"
+    },
+    {
+      "library": "boxicons@2.1.4",
+      "destination": "wwwroot/lib-blazor/boxicons/"
+    },
+    {
+      "library": "open-iconic@1.1.1",
+      "destination": "wwwroot/lib-blazor/open-iconic/",
+      "files": [
+        "font/css/open-iconic-bootstrap.css",
+        "font/css/open-iconic-bootstrap.min.css",
+        "font/css/open-iconic-foundation.css",
+        "font/css/open-iconic-foundation.min.css",
+        "font/css/open-iconic.css",
+        "font/css/open-iconic.min.css",
+        "font/fonts/open-iconic.eot",
+        "font/fonts/open-iconic.otf",
+        "font/fonts/open-iconic.svg",
+        "font/fonts/open-iconic.ttf",
+        "font/fonts/open-iconic.woff"
+      ]
+    }
+  ]
+}

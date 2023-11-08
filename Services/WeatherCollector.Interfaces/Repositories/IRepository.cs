@@ -4,7 +4,7 @@ namespace WeatherCollector.Interfaces.Repositories
 {
     public interface IRepository<T> where T : IEntity
     {
-        Task<bool> ExistById(int id, CancellationToken cancellation = default);
+        Task<bool> Exist(int id, CancellationToken cancellation = default);
 
         Task<bool> Exist(T? entity, CancellationToken cancellation = default);
 
@@ -24,6 +24,6 @@ namespace WeatherCollector.Interfaces.Repositories
 
         Task<T?> Delete(T? entity, CancellationToken cancellation = default);
 
-        Task<T?> DeleteById(int id, CancellationToken cancellation = default);
+        Task<T?> Delete(int id, CancellationToken cancellation = default);
     }
 }

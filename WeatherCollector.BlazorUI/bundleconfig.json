@@ -1,0 +1,32 @@
+﻿[
+  {
+    "inputFiles": [
+      "Styles/app.css"
+    ],
+    "outputFileName": "wwwroot/css/app.css"
+  },
+  {
+    "inputFiles": [
+      "Styles/modal.css"
+    ],
+    "outputFileName": "wwwroot/css/modal.css"
+  },
+  {
+    "inputFiles": [
+      "Scripts/sidebar.js"
+    ],
+    "outputFileName": "wwwroot/scripts/sidebar.js"
+  },
+  {
+    "inputFiles": [
+      "Scripts/modal.js"
+    ],
+    "outputFileName": "wwwroot/scripts/modal.js"
+  },
+  {
+    "inputFiles": [
+      "appsettings.json"
+    ],
+    "outputFileName": "wwwroot/appsettings.json"
+  }
+]

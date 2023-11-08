@@ -1,0 +1,89 @@
+﻿@using AutoMapper;
+@using MetaWeather;
+@using WeatherCollector.BlazorUI.Models.City;
+@using WeatherCollector.BlazorUI.Services.Interfaces;
+@using WeatherCollector.Interfaces.Repositories;
+@using WeatherCollector.Domain;
+@inject ICitiesService _citiesService;
+
+@if (_isOpened)
+{
+    <div class="modal-container">
+        <div id="addCityModal" class="modal">
+            <div class="content">
+                <header>
+                    <h2>Add a new city</h2>
+                    <i class='bx bx-x' @onclick="Close"></i>
+                </header>
+                <EditForm Model="_newCityModel" OnValidSubmit="HandleSubmit">
+                    <DataAnnotationsValidator/>
+                    <div class="field">
+                        <label>Name</label>
+                        <InputText @bind-Value="_newCityModel.Name" />
+                        <ValidationMessage For="() => _newCityModel.Name"/>
+                    </div>
+                    <div class="optional-fields minimized">
+                        <div class="control">
+                            <span>Optional</span>
+                            <i class="bx bx-chevron-down"></i>
+                        </div>
+                        <div class="field">
+                            <label>Country</label>
+                            <InputText @bind-Value="_newCityModel.Country" />
+                        </div>
+                        <div class="field">
+                            <label>Latitude</label>
+                            <InputNumber @bind-Value="_newCityModel.Latitude" />
+                        </div>
+                        <div class="field">
+                            <label>Longitude</label>
+                            <InputNumber @bind-Value="_newCityModel.Longitude" />
+                        </div>
+                    </div>
+                    @if(_faultMessage != null)
+                    {
+                        <p class="validation-message">@_faultMessage</p>
+                    }
+                    <button type="submit">Add</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/modal.min.js"></script>
+}
+
+@code {
+    private CityCreateDTO _newCityModel = new();
+
+    [Parameter]
+    public EventCallback<City> CityCreated { get; set; }
+
+    private string? _faultMessage; 
+
+    private bool _isOpened;
+
+    public void Open() => _isOpened = true;
+
+    public void Close()
+    {
+        _isOpened = false;
+        _faultMessage = null;
+        _newCityModel = new();
+    }
+
+    private async Task HandleSubmit()
+    {
+        var response = await _citiesService.Create(_newCityModel);
+
+        if (!response.Success)
+        {
+            _faultMessage = response.FaultMessage;
+            return;
+        }
+
+        await OnCityCreated(response.Data);
+        Close();
+    }
+
+    private Task OnCityCreated(City city) => CityCreated.InvokeAsync(city);
+}

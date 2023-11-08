@@ -9,11 +9,11 @@ namespace WeatherCollector.Clients.Repositories
 {
     public class WebRepository<T> : IRepository<T> where T : IEntity
     {
-        private readonly HttpClient _client;
+        protected readonly HttpClient _client;
 
         public WebRepository(HttpClient client) => _client = client;
 
-        public async Task<bool> ExistById(int id, CancellationToken cancellation = default)
+        public async Task<bool> Exist(int id, CancellationToken cancellation = default)
         {
             var response = await _client.GetAsync($"exist/{id}", cancellation).ConfigureAwait(false);
             return response.StatusCode != HttpStatusCode.NotFound && response.IsSuccessStatusCode;
@@ -34,10 +34,16 @@ namespace WeatherCollector.Clients.Repositories
 
             return result is null ? Enumerable.Empty<T>() : result;
         }
-            
 
-        public async Task<T?> Get(int id, CancellationToken cancellation = default) => 
-            await _client.GetFromJsonAsync<T?>($"{id}", cancellation).ConfigureAwait(false);
+        public async Task<T?> Get(int id, CancellationToken cancellation = default)
+        {
+            var response = await _client.GetAsync($"{id}", cancellation).ConfigureAwait(false);
+
+            if (response.StatusCode == HttpStatusCode.NotFound) return default;
+
+            var result = await response.EnsureSuccessStatusCode().Content.ReadFromJsonAsync<T>(cancellationToken: cancellation);
+            return result;
+        }
 
         public async Task<IEnumerable<T>> Get(int skip, int count, CancellationToken cancellation = default)
         {
@@ -95,7 +101,7 @@ namespace WeatherCollector.Clients.Repositories
             return result;
         }
 
-        public async Task<T?> DeleteById(int id, CancellationToken cancellation = default)
+        public async Task<T?> Delete(int id, CancellationToken cancellation = default)
         {
             var response = await _client.DeleteAsync($"{id}", cancellation).ConfigureAwait(false);
 
