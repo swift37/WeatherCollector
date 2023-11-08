@@ -1,8 +1,9 @@
 ﻿@page "/sources"
+@using WeatherCollector.BlazorUI.Services.Interfaces;
 @using WeatherCollector.BlazorUI.Shared.Source
 @using WeatherCollector.Interfaces.Repositories;
 @using WeatherCollector.Domain;
-@inject IRepository<Source> _repository;
+@inject ISourcesService _sourcesService;
 
 <CreateSourceModal SourceCreated="(source) => _sources?.Add(source)" @ref="_createSourceModal" />
 
@@ -20,7 +21,7 @@
 </div>
 
 <div class="container centered">
-    @if (SortedSources is { } sources)
+    @if (FilteredSources is { } sources)
     {
         <table>
             <thead>
@@ -68,7 +69,7 @@
 
     private Source? _updatedSource;
 
-    private IEnumerable<Source>? SortedSources =>
+    private IEnumerable<Source>? FilteredSources =>
         string.IsNullOrWhiteSpace(_filter) ? _sources 
         : _sources?.Where(s => s.Id.ToString().Contains(_filter) 
             || (s.Name?.Contains(_filter) ?? false) 
@@ -76,7 +77,12 @@
 
     protected override async Task OnInitializedAsync() => await Load();
 
-    private async Task Load() => _sources = (await _repository.GetAll()).ToList();
+    private async Task Load()
+    {
+        var result = await _sourcesService.GetAll();
+        if (result.Success)
+            _sources = result.Data.ToList();
+    }
 
     private void Update(Source source)
     {
@@ -84,13 +90,14 @@
         _updateSourceModal?.Open();
     }
 
-    private async Task Delete(Source? source)
+    private async Task Delete(Source source)
     {
         if (_sources is not { Count: > 0 }) return;
 
-        var deletedSource = await _repository.Delete(source);
-        if (deletedSource is not null)
-            _sources.Remove(deletedSource);
+        var result = await _sourcesService.Delete(source);
+
+        if (result.Success)
+            _sources.Remove(result.Data);
     }
 
 }
