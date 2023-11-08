@@ -20,6 +20,7 @@ builder.Services.AddAPI<IRepository<Property>, WebRepository<Property>>("api/pro
 builder.Services.AddAPI<PropertiesWebRepository>("api/propertiesrepository/");
 builder.Services.AddAPI<AstroWeatherClient>(null, builder.Configuration["SourceURI"]);
 builder.Services.AddScoped<ICitiesService, CitiesService>();
+builder.Services.AddScoped<ISourcesService, SourcesService>();
 builder.Services.AddScoped<IPropertiesService, PropertiesService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 
