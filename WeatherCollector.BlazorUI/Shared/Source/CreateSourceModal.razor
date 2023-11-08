@@ -1,6 +1,8 @@
-﻿@using WeatherCollector.Interfaces.Repositories;
+﻿@using WeatherCollector.BlazorUI.Models.Source;
+@using WeatherCollector.BlazorUI.Services.Interfaces;
+@using WeatherCollector.Interfaces.Repositories;
 @using WeatherCollector.Domain;
-@inject IRepository<Source> _repository;
+@inject ISourcesService _sourcesService;
 
 @if (_isOpened)
 {
@@ -12,14 +14,20 @@
                     <i class='bx bx-x' @onclick="Close"></i>
                 </header>
                 <EditForm Model="_newSourceModel" OnValidSubmit="HandleSubmit">
+                    <DataAnnotationsValidator/>
                     <div class="field">
                         <label>Name</label>
                         <InputText @bind-Value="_newSourceModel.Name" />
+                        <ValidationMessage For="() => _newSourceModel.Name" />
                     </div>
                     <div class="field">
                         <label>Details</label>
                         <InputTextArea @bind-Value="_newSourceModel.Details" />
                     </div>
+                    @if (_faultMessage != null)
+                    {
+                        <p class="validation-message">@_faultMessage</p>
+                    }
                     <button type="submit">Create</button>
                 </EditForm>
             </div>
@@ -29,12 +37,14 @@
 
 
 @code {
-    private Source _newSourceModel = new();
+    private SourceCreateDTO _newSourceModel = new();
 
     [Parameter]
     public EventCallback<Source> SourceCreated { get; set; }
 
     private bool _isOpened;
+
+    private string? _faultMessage;
 
     public void Open() => _isOpened = true;
 
@@ -46,10 +56,14 @@
 
     private async Task HandleSubmit()
     {
-        var createdSource = await _repository.Create(_newSourceModel);
-        if (createdSource is null) return;
+        var response = await _sourcesService.Create(_newSourceModel);
+        if (!response.Success)
+        {
+            _faultMessage = response.FaultMessage;
+            return;
+        }
 
-        await OnSourceCreated(createdSource);
+        await OnSourceCreated(response.Data);
         Close();
     }
 

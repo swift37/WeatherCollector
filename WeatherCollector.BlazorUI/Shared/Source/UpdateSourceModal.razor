@@ -1,5 +1,10 @@
-﻿@using WeatherCollector.Interfaces.Repositories;
+﻿@using AutoMapper;
+@using WeatherCollector.BlazorUI.Models.Source;
+@using WeatherCollector.BlazorUI.Services.Interfaces;
+@using WeatherCollector.Interfaces.Repositories;
 @using WeatherCollector.Domain;
+@inject IMapper _mapper;
+@inject ISourcesService _sourcesService;
 @inject IRepository<Source> _repository;
 
 @if (_isOpened)
@@ -11,15 +16,21 @@
                     <h2>Updathe the source</h2>
                     <i class='bx bx-x' @onclick="Close"></i>
                 </header>
-                <EditForm Model="Source" OnValidSubmit="HandleSubmit">
+                <EditForm Model="_updateSourceModel" OnValidSubmit="HandleSubmit">
+                    <DataAnnotationsValidator/>
                     <div class="field">
                         <label>Name</label>
-                        <InputText @bind-Value="Source.Name" />
+                        <InputText @bind-Value="_updateSourceModel.Name" />
+                        <ValidationMessage For="() => _updateSourceModel.Name" />
                     </div>
                     <div class="field">
                         <label>Details</label>
-                        <InputTextArea @bind-Value="Source.Details" />
+                        <InputTextArea @bind-Value="_updateSourceModel.Details" />
                     </div>
+                    @if (_faultMessage != null)
+                    {
+                        <p class="validation-message">@_faultMessage</p>
+                    }
                     <button type="submit">Update</button>
                 </EditForm>
             </div>
@@ -36,22 +47,33 @@
     [Parameter]
     public EventCallback<Source> SourceUpdated { get; set; }
 
+    private SourceUpdateDTO _updateSourceModel = new();
+
+    private string? _faultMessage;
+
     private bool _isOpened;
+
+    protected override void OnParametersSet() => _updateSourceModel = _mapper.Map<SourceUpdateDTO>(Source);
 
     public void Open() => _isOpened = true;
 
     public void Close()
     {
         _isOpened = false;
-        Source = new();
+        _faultMessage = null;
+        _updateSourceModel = new();
     }
 
     private async Task HandleSubmit()
     {
-        var updatedSource = await _repository.Update(Source);
-        if (updatedSource is null) return;
+        var response = await _sourcesService.Update(_updateSourceModel);
+        if (!response.Success)
+        {
+            _faultMessage = response.FaultMessage;
+            return;
+        }
 
-        await OnSourceUpdated(updatedSource);
+        await OnSourceUpdated(response.Data);
         Close();
     }
 

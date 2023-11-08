@@ -3,7 +3,7 @@
 @using WeatherCollector.BlazorUI.Shared.City
 @using WeatherCollector.Interfaces.Repositories;
 @using WeatherCollector.Domain;
-@inject ICitiesService _citiesSevice;
+@inject ICitiesService _citiesService;
 
 <CreateCityModal CityCreated="(city) => _cities?.Add(city)" @ref="_createCityModal" />
 
@@ -21,7 +21,7 @@
 </div>
 
 <div class="container centered">
-    @if (SortedCitys is { } cities)
+    @if (FilteredCitys is { } cities)
     {
         <table>
             <thead>
@@ -73,7 +73,7 @@
 
     private City? _updatedCity;
 
-    private IEnumerable<City>? SortedCitys =>
+    private IEnumerable<City>? FilteredCitys =>
         string.IsNullOrWhiteSpace(_filter) ? _cities
         : _cities?.Where(c => c.Id.ToString().Contains(_filter)
             || (c.Name?.Contains(_filter) ?? false)
@@ -85,7 +85,7 @@
 
     private async Task Load()
     {
-        var result = await _citiesSevice.GetAll();
+        var result = await _citiesService.GetAll();
         if (result.Success)
             _cities = result.Data.ToList();
     }
@@ -100,7 +100,7 @@
     {
         if (_cities is not { Count: > 0 }) return;
 
-        var result = await _citiesSevice.Delete(city);
+        var result = await _citiesService.Delete(city);
         if (result.Success)
             _cities.Remove(result.Data);
     }
