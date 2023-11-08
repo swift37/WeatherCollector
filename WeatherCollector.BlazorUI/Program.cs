@@ -16,8 +16,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAPI<INamedRepository<City>, WebNamedRepository<City>>("api/citiesrepository/");
 builder.Services.AddAPI<IRepository<Source>, WebRepository<Source>>("api/sourcesrepository/");
-builder.Services.AddAPI<IRepository<Property>, WebRepository<Property>>("api/propertiesrepository/");
-builder.Services.AddAPI<AstroWeatherClient>(builder.Configuration["SourceURI"]);
+builder.Services.AddAPI<PropertiesWebRepository>("api/propertiesrepository/");
+builder.Services.AddAPI<AstroWeatherClient>(null, builder.Configuration["SourceURI"]);
 builder.Services.AddScoped<ICitiesService, CitiesService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 

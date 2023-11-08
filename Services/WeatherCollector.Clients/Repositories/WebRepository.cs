@@ -34,7 +34,6 @@ namespace WeatherCollector.Clients.Repositories
 
             return result is null ? Enumerable.Empty<T>() : result;
         }
-            
 
         public async Task<T?> Get(int id, CancellationToken cancellation = default)
         {

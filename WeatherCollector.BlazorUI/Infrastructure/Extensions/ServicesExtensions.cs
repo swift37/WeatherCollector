@@ -10,9 +10,12 @@ namespace WeatherCollector.BlazorUI.Infrastructure.Extensions
             services.AddHttpClient<TClient, TImplementation>((host, client) => 
                 client.BaseAddress = new(host.GetRequiredService<IWebAssemblyHostEnvironment>().BaseAddress + address));
 
-        public static IHttpClientBuilder AddAPI<TClient>(this IServiceCollection services, string? fullAddress)
+        public static IHttpClientBuilder AddAPI<TClient>(this IServiceCollection services, string? address, string? fullAddress = null)
             where TClient : class =>
-            services.AddHttpClient<TClient>((host, client) =>
-                client.BaseAddress = new(fullAddress ?? throw new InvalidDataException("Base URI does not exist.")));
+            services.AddHttpClient<TClient>((host, client) => client.BaseAddress = 
+                new((string.IsNullOrEmpty(address) ? 
+                    fullAddress : 
+                    host.GetRequiredService<IWebAssemblyHostEnvironment>().BaseAddress + address) 
+                    ?? throw new InvalidDataException("Base URI does not exist.")));
     }
 }
