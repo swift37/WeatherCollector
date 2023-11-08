@@ -238,7 +238,7 @@ table {
     align-items: center;
     flex-wrap: wrap;
     gap: 1em;
-    margin-bottom: 0.2em;
+    margin-bottom: 0.5em;
 }
 
 .search-box .search-bar {

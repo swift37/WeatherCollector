@@ -23,9 +23,16 @@
 {
     <p class="validation-message">@_faultMessage</p>
 }
+@if (_properties != null)
+{
+    <div class="search-bar">
+        <i class="bx bx-search"></i>
+        <input type="text" @bind="_filter" @bind:event="oninput" placeholder="Search..." />
+    </div>
+}
 
 <div class="container centered">
-    @if (_properties is { } properties)
+    @if (FilteredProperties is { } properties)
     {
         <table>
             <thead>
@@ -61,6 +68,17 @@
     private string? _cityName;
 
     private string? _faultMessage;
+
+    private string? _filter;
+
+    private IEnumerable<Property>? FilteredProperties =>
+        string.IsNullOrWhiteSpace(_filter) ? _properties
+        : _properties?.Where(p => p.Id.ToString().Contains(_filter)
+            || (p.Name?.Contains(_filter) ?? false)
+            || (p.Value?.Contains(_filter) ?? false)
+            || (p.City?.Name?.Contains(_filter) ?? false)
+            || (p.Source?.Name?.Contains(_filter) ?? false)
+            || (p.Time.ToString().Contains(_filter)));
 
     private async Task GetData()
     {

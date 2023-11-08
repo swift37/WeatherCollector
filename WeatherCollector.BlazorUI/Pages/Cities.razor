@@ -75,11 +75,11 @@
 
     private IEnumerable<City>? SortedCitys =>
         string.IsNullOrWhiteSpace(_filter) ? _cities
-        : _cities?.Where(s => s.Id.ToString().Contains(_filter)
-            || (s.Name?.Contains(_filter) ?? false)
-            || (s.Country?.Contains(_filter) ?? false)
-            || (s.Latitude.ToString().Contains(_filter))
-            || (s.Longitude.ToString().Contains(_filter)));
+        : _cities?.Where(c => c.Id.ToString().Contains(_filter)
+            || (c.Name?.Contains(_filter) ?? false)
+            || (c.Country?.Contains(_filter) ?? false)
+            || (c.Latitude.ToString().Contains(_filter))
+            || (c.Longitude.ToString().Contains(_filter)));
 
     protected override async Task OnInitializedAsync() => await Load();
 
