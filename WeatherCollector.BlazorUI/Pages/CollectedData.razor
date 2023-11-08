@@ -1,7 +1,84 @@
 ﻿@page "/collected"
+@using WeatherCollector.BlazorUI.Services.Interfaces;
+@using WeatherCollector.Domain;
+@using WeatherCollector.Interfaces.Repositories;
+@inject IWeatherService _weatherService;
 
-<h3>Collected Data</h3>
+<div class="page-head">
+    <h2>Collected weather data for selected city</h2>
+    <span>Enter your city name and select a data source</span>
+</div>
+
+<div class="search-box">
+    <div class="search-bar">
+        <i class='bx bx-analyse'></i>
+        <input type="text" @bind="_cityName" @bind:event="oninput" placeholder="Enter the city name" />
+    </div>
+
+    <button @onclick="GetData" class="search-btn">
+        Get data
+    </button>
+</div>
+@if (_faultMessage != null)
+{
+    <p class="validation-message">@_faultMessage</p>
+}
+
+<div class="container centered">
+    @if (_properties is { } properties)
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>@nameof(Property.Id)</th>
+                    <th>@nameof(Property.Time)</th>
+                    <th>@nameof(Property.City)</th>
+                    <th>@nameof(Property.Name)</th>
+                    <th>@nameof(Property.Value)</th>
+                    <th>@nameof(Property.Source)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var property in properties)
+                {
+                    <tr>
+                        <td>@property.Id</td>
+                        <td>@property.Time</td>
+                        <td>@property.City?.Name</td>
+                        <td>@property.Name</td>
+                        <td>@property.Value</td>
+                        <td>@property.Source?.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 
 @code {
+    private IEnumerable<Property>? _properties;
 
+    private string? _cityName;
+
+    private string? _faultMessage;
+
+    private async Task GetData()
+    {
+        Reset();
+
+        var result = await _weatherService.GetCollectedData(_cityName);
+        if (!result.Success)
+        {
+            _faultMessage = result.FaultMessage;
+            return;
+        }
+
+        _properties = result.Data;
+    }
+
+    private void Reset()
+    {
+        _properties = null;
+        _faultMessage = null;
+    }
 }

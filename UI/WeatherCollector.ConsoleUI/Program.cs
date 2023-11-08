@@ -30,7 +30,7 @@ class Program
             client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/sourcesrepository/");
         });
 
-        services.AddHttpClient<IRepository<Property>, WebRepository<Property>>(client =>
+        services.AddHttpClient<INamedRepository<Property>, WebNamedRepository<Property>>(client =>
         {
             client.BaseAddress = new Uri($"{host.Configuration["WebAPI"]}/api/propertiesrepository/");
         });
